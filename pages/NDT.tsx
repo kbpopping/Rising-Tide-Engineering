@@ -1,4 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 w-full cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg bg-slate-900">
+           <img src={sector.img} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+           <div className="absolute bottom-0 left-0 p-6 w-full">
+             <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
+             <h3 className="text-xl font-bold text-white font-display mb-1">{sector.title}</h3>
+             <p className="text-white/80 text-sm font-medium">{sector.desc}</p>
+           </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-8 flex flex-col justify-center items-center text-center rounded-lg border-2 border-safety shadow-xl">
+            <span className="material-symbols-outlined text-safety mb-4 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-2xl font-bold text-white mb-3 font-display">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+              Advanced NDT solutions for {sector.title}, ensuring {sector.desc.toLowerCase()}
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const NDT: React.FC = () => {
   const sectors = [
@@ -55,16 +88,18 @@ const NDT: React.FC = () => {
   return (
     <div className="w-full bg-slate-50">
       <div className="relative w-full overflow-hidden h-[500px] flex items-center justify-center">
-        <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "linear-gradient(0deg, rgba(31, 87, 42, 0.9) 0%, rgba(31, 87, 42, 0.4) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuB1pMSWtfb5DPl5cvr2545Q1d05OpnF1B0EMjPbnPPh_bWBYyU2UrlzQ8Erv1HVnp7qSXU8-jluvexOymK3X0ka1gMPSECa7pWwooA0_DkPaU-JenTk2zZzkjf7A2AUtpZjAQuonLiYupR4oy5dxL1jd2XILHF0ZVnIImQgx2sQSacYT_Z_3wE3xvZWNOyiN5_BO4ogVeGObfE4jdaqEnNIMI37lJOQOo_e-S-v34t4w95IfIASCN_LCEj1bs6jQVYnUCtVHa7wWEg')" }}>
-        </div>
-        <div className="relative z-10 flex w-full max-w-7xl flex-col px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-safety/30 bg-safety/10 px-3 py-1 text-xs font-medium text-white uppercase tracking-wider backdrop-blur-sm">
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
+          style={{ backgroundImage: "linear-gradient(0deg, rgba(31, 87, 42, 0.9) 0%, rgba(31, 87, 42, 0.4) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuB1pMSWtfb5DPl5cvr2545Q1d05OpnF1B0EMjPbnPPh_bWBYyU2UrlzQ8Erv1HVnp7qSXU8-jluvexOymK3X0ka1gMPSECa7pWwooA0_DkPaU-JenTk2zZzkjf7A2AUtpZjAQuonLiYupR4oy5dxL1jd2XILHF0ZVnIImQgx2sQSacYT_Z_3wE3xvZWNOyiN5_BO4ogVeGObfE4jdaqEnNIMI37lJOQOo_e-S-v34t4w95IfIASCN_LCEj1bs6jQVYnUCtVHa7wWEg')" }}
+        ></div>
+        <div className="relative z-10 flex w-full max-w-7xl flex-col px-6 lg:px-8 pointer-events-none">
+          <div className="max-w-3xl pointer-events-auto">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-safety/30 bg-safety/10 px-3 py-1 text-xs font-medium text-white uppercase tracking-wider backdrop-blur-sm animate-fade-in-up">
               <span className="h-2 w-2 rounded-full bg-safety animate-pulse"></span>
               Asset Integrity Services
             </div>
-            <h2 className="text-5xl font-bold leading-tight text-white sm:text-6xl mb-6 font-display">Non-Destructive Testing (NDT)</h2>
-            <p className="text-lg text-white/90 max-w-2xl font-light font-body">
+            <h2 className="text-5xl font-bold leading-tight text-white sm:text-6xl mb-6 font-display animate-fade-in-up-delay-1">Non-Destructive Testing (NDT)</h2>
+            <p className="text-lg text-white/90 max-w-2xl font-light font-body animate-fade-in-up-delay-2">
               Advanced inspection methodologies ensuring critical infrastructure integrity without compromising structural safety. Precision diagnostics for complex industrial assets.
             </p>
           </div>
@@ -245,20 +280,7 @@ const NDT: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {sectors.map((sector, index) => (
-              <div key={index} className="group relative h-64 w-full overflow-hidden rounded-lg cursor-pointer">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
-                  style={{ backgroundImage: `url("${sector.img}")` }}
-                ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                <div className="absolute bottom-0 left-0 p-6 w-full">
-                  <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
-                  <h3 className="text-xl font-bold text-white font-display">{sector.title}</h3>
-                  <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-2 transition-all duration-300">
-                    <p className="text-sm text-gray-300 font-body">{sector.desc}</p>
-                  </div>
-                </div>
-              </div>
+              <SectorCard key={index} sector={sector} />
             ))}
           </div>
         </div>

@@ -66,13 +66,13 @@ const Layout: React.FC = () => {
                 </div>
               </div>
 
-              <Link to="/about" className={`text-sm font-medium hover:text-safety transition-colors ${isActive('/about') ? 'text-primary' : 'text-slate-600'}`}>About</Link>
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-safety transition-colors">Projects</a>
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-safety transition-colors">Contact</a>
+              <Link to="/about" className={`text-sm font-medium hover:text-safety transition-colors ${isActive('/about') ? 'text-primary' : 'text-slate-600'}`}>About Us</Link>
+              <Link to="/projects" className={`text-sm font-medium hover:text-safety transition-colors ${isActive('/projects') ? 'text-primary' : 'text-slate-600'}`}>Projects</Link>
+              <Link to="/contact" className={`text-sm font-medium hover:text-safety transition-colors ${isActive('/contact') ? 'text-primary' : 'text-slate-600'}`}>Contact</Link>
             </div>
-            <button className="bg-safety hover:bg-orange-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+            <Link to="/contact" className="bg-safety hover:bg-orange-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
               Request Quote
-            </button>
+            </Link>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -114,10 +114,10 @@ const Layout: React.FC = () => {
                 )}
               </div>
 
-              <Link to="/about" className="text-sm font-medium text-slate-700 hover:text-safety" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-              <a href="#" className="text-sm font-medium text-slate-700 hover:text-safety">Projects</a>
-              <a href="#" className="text-sm font-medium text-slate-700 hover:text-safety">Contact</a>
-              <button className="bg-safety text-white text-sm font-bold px-4 py-3 rounded-lg w-full mt-2">Request Quote</button>
+              <Link to="/about" className="text-sm font-medium text-slate-700 hover:text-safety" onClick={() => setIsMobileMenuOpen(false)}>About Us</Link>
+              <Link to="/projects" className="text-sm font-medium text-slate-700 hover:text-safety" onClick={() => setIsMobileMenuOpen(false)}>Projects</Link>
+              <Link to="/contact" className="text-sm font-medium text-slate-700 hover:text-safety" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+              <Link to="/contact" className="bg-safety text-white text-sm font-bold px-4 py-3 rounded-lg w-full mt-2 text-center" onClick={() => setIsMobileMenuOpen(false)}>Request Quote</Link>
             </div>
           </div>
         )}
@@ -161,7 +161,7 @@ const Layout: React.FC = () => {
                 <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Safety Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
               </ul>
             </div>
 

@@ -1,4 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 w-full cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg">
+           <img src={sector.image || sector.img} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+           <div className="absolute bottom-0 left-0 p-6 w-full">
+             <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
+             <h3 className="text-xl font-bold text-white font-display mb-1">{sector.title}</h3>
+             <p className="text-white/80 text-sm font-medium">{sector.desc}</p>
+           </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-8 flex flex-col justify-center items-center text-center rounded-lg border-2 border-safety shadow-xl">
+            <span className="material-symbols-outlined text-safety mb-4 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-2xl font-bold text-white mb-3 font-display">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+              We provide specialized engineering solutions for the {sector.title} sector, focusing on {sector.desc.toLowerCase()}
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Piping: React.FC = () => {
   const sectors = [
@@ -55,26 +89,27 @@ const Piping: React.FC = () => {
   return (
     <div className="w-full bg-slate-50">
       {/* Hero Section */}
-      <div className="relative w-full">
+      <div className="relative w-full h-[600px] overflow-hidden">
         <div 
-          className="flex min-h-[560px] flex-col justify-end bg-cover bg-center bg-no-repeat px-6 py-16 md:px-12 lg:px-20 xl:px-40" 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
           style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAmUmTXr1HjhO0EseY3uS60Mh7bhZkYQjljR01zd62kKb02RxIm_S1Fz8-bc_ii5l-gRuDujhBuylO0et4lSoKUNjmdgXwbhxyg7SJ4KdKWoPrSiIs8xGfjrc6W6Te2EnkUSOC7nBiCXPZiK5b3F453H59sV9Z7RspCyLzHdtsK7TiIYUe1piJ8HWYs81uSWOtzhgqyEMbHHj4BnSBw8nucvWv614aQl2I6I14uKnH60vvcpxUPQF1LaGWwst3b439nhGt_vuRdZS8")' }}
-        >
-          <div className="flex flex-col gap-4 text-left max-w-4xl">
-            <div className="flex items-center gap-2 mb-2">
+        ></div>
+        <div className="absolute inset-0 flex flex-col justify-end px-6 py-16 md:px-12 lg:px-20 xl:px-40 pointer-events-none">
+          <div className="flex flex-col gap-4 text-left max-w-4xl pointer-events-auto">
+            <div className="flex items-center gap-2 mb-2 animate-fade-in-up">
               <span className="material-symbols-outlined text-safety">engineering</span>
               <span className="text-safety font-bold uppercase tracking-wider text-sm">Industrial Services</span>
             </div>
-            <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl lg:text-6xl">
+            <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl lg:text-6xl animate-fade-in-up-delay-1">
               Piping Fabrication & Installation
             </h1>
-            <p className="text-gray-200 text-lg font-normal leading-relaxed max-w-2xl mt-2">
+            <p className="text-gray-200 text-lg font-normal leading-relaxed max-w-2xl mt-2 animate-fade-in-up-delay-2">
               Precision engineering for high-pressure industrial systems. We deliver ASME-compliant fabrication and seamless on-site installation for the world's most demanding sectors.
             </p>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <button className="flex items-center justify-center rounded-lg h-12 px-6 bg-safety hover:bg-orange-700 text-white font-bold transition-colors">
+            <div className="mt-6 flex flex-wrap gap-4 animate-fade-in-up-delay-2">
+              <Link to="/projects" className="flex items-center justify-center rounded-lg h-12 px-6 bg-safety hover:bg-orange-700 text-white font-bold transition-colors shadow-lg hover:shadow-orange-500/40 transform hover:-translate-y-1">
                 View Projects
-              </button>
+              </Link>
               <button className="flex items-center justify-center rounded-lg h-12 px-6 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold border border-white/20 transition-colors">
                 Download Brochure
               </button>
@@ -233,20 +268,7 @@ const Piping: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {sectors.map((sector, index) => (
-              <div key={index} className="group relative h-64 w-full overflow-hidden rounded-lg cursor-pointer">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
-                  style={{ backgroundImage: `url("${sector.image}")` }}
-                ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                <div className="absolute bottom-0 left-0 p-6 w-full">
-                  <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
-                  <h3 className="text-xl font-bold text-white">{sector.title}</h3>
-                  <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-2 transition-all duration-300">
-                    <p className="text-sm text-gray-300">{sector.desc}</p>
-                  </div>
-                </div>
-              </div>
+              <SectorCard key={index} sector={sector} />
             ))}
           </div>
         </div>

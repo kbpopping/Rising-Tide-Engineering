@@ -1,4 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 w-full cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg bg-slate-900">
+           <img src={sector.img} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+           <div className="absolute bottom-0 left-0 p-6 w-full">
+             <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
+             <h3 className="text-xl font-bold text-white font-display mb-1">{sector.title}</h3>
+             <p className="text-white/80 text-sm font-medium">{sector.desc}</p>
+           </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-8 flex flex-col justify-center items-center text-center rounded-lg border-2 border-safety shadow-xl">
+            <span className="material-symbols-outlined text-safety mb-4 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-2xl font-bold text-white mb-3 font-display">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+              High-efficiency insulation systems for {sector.title}, optimizing {sector.desc.toLowerCase()}
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ThermalInsulation: React.FC = () => {
   const sectors = [
@@ -18,7 +51,7 @@ const ThermalInsulation: React.FC = () => {
       title: "Petrochemical",
       icon: "science",
       desc: "Chemical processing insulation.",
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD97zT51b9Dp9C5ItC6trtYPvrD8TY1XBf91d6LwZASxKHWCDyi-YRmX-4Q3EGQQAMpamFr-G-KcY2fDnjuTNICc8D5JpoxClOByl23zg3SSxs0v1qZoLu_fNr-WZ-4_C3I4ETc65cu2zMrXUmPaAYD8q7H2C6FnQFU7Zudqt_xuFF5czQ_Lk-4w49a5DA2Bu20gSjBZRstUyxij30Y6VP_XZxnNr-XO4VOhw15GjPBXM22I2775jvZCHMeDBUJGUJKKRoq5WcDWjM"
+      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD97zT51b9Dp9C5ItC6trtYPvrD8TY1XBf91d6LwZASxKHWCDyi-YRmX-4Q3EGQQAMpamFr-G-KcY2fDnjuTNICc8D5JpoxClOByl23zg3SSxs0v1qZoLu_fNr-WZ-4_C3I4ETc65cu2zMrXUmPaAYD8q7H2C6FnQFU7Zudqt_xuFF5czQ_Lk-4w49a5DA2Bu20gSjBZRstUyxij3avOy_CvTdYRspP-Oj3V8pSmvtajxT6THolaQV9vfBsAhKNQUogtsQE2NTFeFZfoY8Igv04KhTpZjGme1OzuwjpwMt0Sl7O3_clnDOgQKHIsbuxBxSyrYHu9QiZNFxBtaQMaI"
     },
     {
       title: "Construction",
@@ -55,16 +88,18 @@ const ThermalInsulation: React.FC = () => {
   return (
     <div className="w-full bg-slate-50">
       <div className="relative w-full overflow-hidden h-[500px] flex items-center justify-center bg-primary">
-        <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvnimRGqPdw18A_LZeiL0n9geFcIQ3klZpD4X0u68n5RWYqncQou3OTgxj4uVVMBs9AGInh1Z9JAHWqCvrn08yV3Kd5OvRdOu15bIy7WJNuvvhAOK1_n1FkNYgB74wcqDrA6NM42wo_ZT1wC7OVnOy5yb-yNQLSf6PdXvwjb39MebiL2oLSBZCNmBCOA9zrzBAOpUG4eyavJ0WljFNzFjDFaOz8Wcz-equI7ybU1wqJChBMlC8FW5GweMQtGCyYwnE5wUWBK-SXOc')" }}>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/60 to-transparent z-10"></div>
-        <div className="relative z-20 flex w-full max-w-7xl flex-col px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full px-0 py-1 text-xs font-bold text-safety uppercase tracking-wider">
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
+          style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvnimRGqPdw18A_LZeiL0n9geFcIQ3klZpD4X0u68n5RWYqncQou3OTgxj4uVVMBs9AGInh1Z9JAHWqCvrn08yV3Kd5OvRdOu15bIy7WJNuvvhAOK1_n1FkNYgB74wcqDrA6NM42wo_ZT1wC7OVnOy5yb-yNQLSf6PdXvwjb39MebiL2oLSBZCNmBCOA9zrzBAOpUG4eyavJ0WljFNzFjDFaOz8Wcz-equI7ybU1wqJChBMlC8FW5GweMQtGCyYwnE5wUWBK-SXOc')" }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/60 to-transparent z-10 pointer-events-none"></div>
+        <div className="relative z-20 flex w-full max-w-7xl flex-col px-6 lg:px-8 pointer-events-none">
+          <div className="max-w-3xl pointer-events-auto">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full px-0 py-1 text-xs font-bold text-safety uppercase tracking-wider animate-fade-in-up">
               Industrial Services
             </div>
-            <h1 className="text-4xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6 font-display">Thermal Insulation Solutions</h1>
-            <p className="text-lg text-white/90 max-w-2xl font-light font-body">
+            <h1 className="text-4xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6 font-display animate-fade-in-up-delay-1">Thermal Insulation Solutions</h1>
+            <p className="text-lg text-white/90 max-w-2xl font-light font-body animate-fade-in-up-delay-2">
               Maximizing energy efficiency, process control, and personnel safety for complex industrial infrastructure.
             </p>
           </div>
@@ -208,23 +243,13 @@ const ThermalInsulation: React.FC = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 font-display border-b-2 border-safety pb-2 w-fit">Sector Applications</h2>
               <p className="text-slate-600 max-w-2xl font-body mt-4">Tailored insulation solutions engineered for the specific demands of major industrial sectors.</p>
             </div>
+            <a href="#" className="text-safety font-bold flex items-center gap-1 hover:gap-2 transition-all">
+              View All Sectors <span className="material-symbols-outlined">arrow_right_alt</span>
+            </a>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {sectors.map((sector, index) => (
-              <div key={index} className="group relative h-64 w-full overflow-hidden rounded-lg cursor-pointer bg-slate-900">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
-                  style={{ backgroundImage: `url("${sector.img}")` }}
-                ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                <div className="absolute bottom-0 left-0 p-6 w-full">
-                  <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
-                  <h3 className="text-xl font-bold text-white font-display">{sector.title}</h3>
-                  <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-2 transition-all duration-300">
-                    <p className="text-sm text-gray-300 font-body">{sector.desc}</p>
-                  </div>
-                </div>
-              </div>
+              <SectorCard key={index} sector={sector} />
             ))}
           </div>
         </div>

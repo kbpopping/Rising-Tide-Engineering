@@ -1,4 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 w-full cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded overflow-hidden shadow-lg">
+           <img src={sector.img} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+           <div className="absolute bottom-0 left-0 p-6">
+              <h4 className="text-white font-bold text-xl mb-1 flex items-center gap-2 font-display">
+                <span className="material-symbols-outlined text-secondary">{sector.icon}</span>
+                {sector.title}
+              </h4>
+              <p className="text-gray-200 text-sm">{sector.desc}</p>
+            </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-8 flex flex-col justify-center items-center text-center rounded border-2 border-secondary shadow-xl">
+            <span className="material-symbols-outlined text-secondary mb-4 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-2xl font-bold text-white mb-3 font-display">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+               Providing expert asset integrity management for {sector.title}, specializing in {sector.desc.toLowerCase()}
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AssetIntegrity: React.FC = () => {
   const sectors = [
@@ -54,22 +89,28 @@ const AssetIntegrity: React.FC = () => {
 
   return (
     <div className="w-full bg-slate-50">
-      {/* Hero with Parallax feel */}
-      <header className="relative h-[500px] flex items-center w-full bg-fixed bg-center bg-cover" style={{ backgroundImage: 'linear-gradient(rgba(17, 24, 39, 0.65), rgba(17, 24, 39, 0.75)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBubNQPYJT7FjN9RYjkli2LUP9msuRNIzKxkEYEQKporF7fkP2-dD8uR9AskstWryQuj0zMBUmRvM9teQyc5pwAGnLNgudM5gEuyEDFkiwsWkLjhebmm1Gd8CcK_KMEdc87E158qX0sV3UJ0qPHdg-8IfdE_Cea_Q4rbJEyqiWPMbhLiPCvS5zltO0m5m6eVcAgtaO2GX-bj2udQUZ2U5V0XlWLp4Mneh6iuhVg4qcRCKgK8XUpBNkd7T60fm45OOXKeGRwtGI1EkI")' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
-          <nav className="flex mb-4 text-sm font-medium text-gray-200">
-            <ol className="flex items-center space-x-2">
-              <li><span className="hover:text-safety transition-colors cursor-pointer">Services</span></li>
-              <li><span className="material-symbols-outlined text-xs mx-1">chevron_right</span></li>
-              <li className="text-safety font-bold">Asset Integrity</li>
-            </ol>
-          </nav>
-          <h1 className="text-5xl md:text-6xl font-bold text-white font-display tracking-wide drop-shadow-xl max-w-4xl">
-            Asset Integrity Management
-          </h1>
-          <p className="mt-6 text-xl md:text-2xl text-gray-100 max-w-2xl font-light drop-shadow-lg leading-relaxed">
-            Ensuring operational excellence and longevity for critical infrastructure across Nigeria's energy sectors.
-          </p>
+      {/* Hero with Animations */}
+      <header className="relative h-[500px] flex items-center w-full overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center animate-ken-burns" 
+          style={{ backgroundImage: 'linear-gradient(rgba(17, 24, 39, 0.65), rgba(17, 24, 39, 0.75)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBubNQPYJT7FjN9RYjkli2LUP9msuRNIzKxkEYEQKporF7fkP2-dD8uR9AskstWryQuj0zMBUmRvM9teQyc5pwAGnLNgudM5gEuyEDFkiwsWkLjhebmm1Gd8CcK_KMEdc87E158qX0sV3UJ0qPHdg-8IfdE_Cea_Q4rbJEyqiWPMbhLiPCvS5zltO0m5m6eVcAgtaO2GX-bj2udQUZ2U5V0XlWLp4Mneh6iuhVg4qcRCKgK8XUpBNkd7T60fm45OOXKeGRwtGI1EkI")' }}
+        ></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10 pointer-events-none">
+          <div className="pointer-events-auto">
+            <nav className="flex mb-4 text-sm font-medium text-gray-200 animate-fade-in-up">
+              <ol className="flex items-center space-x-2">
+                <li><span className="hover:text-safety transition-colors cursor-pointer">Services</span></li>
+                <li><span className="material-symbols-outlined text-xs mx-1">chevron_right</span></li>
+                <li className="text-safety font-bold">Asset Integrity</li>
+              </ol>
+            </nav>
+            <h1 className="text-5xl md:text-6xl font-bold text-white font-display tracking-wide drop-shadow-xl max-w-4xl animate-fade-in-up-delay-1">
+              Asset Integrity Management
+            </h1>
+            <p className="mt-6 text-xl md:text-2xl text-gray-100 max-w-2xl font-light drop-shadow-lg leading-relaxed animate-fade-in-up-delay-2">
+              Ensuring operational excellence and longevity for critical infrastructure across Nigeria's energy sectors.
+            </p>
+          </div>
         </div>
       </header>
 
@@ -111,19 +152,7 @@ const AssetIntegrity: React.FC = () => {
               <h3 className="text-2xl font-bold text-slate-900 mb-8 border-b border-gray-200 pb-4 font-display">Sector Application</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {sectors.map((sector, idx) => (
-                  <div key={idx} className="relative group overflow-hidden rounded shadow-lg h-64 cursor-pointer">
-                    <img alt={sector.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={sector.img} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent group-hover:from-safety/90 group-hover:via-safety/60 transition-colors duration-300"></div>
-                    <div className="absolute bottom-0 left-0 p-6">
-                      <h4 className="text-white font-bold text-xl mb-1 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-secondary">{sector.icon}</span>
-                        {sector.title}
-                      </h4>
-                      <p className="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
-                        {sector.desc}
-                      </p>
-                    </div>
-                  </div>
+                  <SectorCard key={idx} sector={sector} />
                 ))}
               </div>
             </section>

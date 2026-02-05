@@ -5,9 +5,13 @@ import Home from './pages/Home';
 import Piping from './pages/Piping';
 import AssetIntegrity from './pages/AssetIntegrity';
 import About from './pages/About';
+import History from './pages/History';
+import TeamMemberBio from './pages/TeamMemberBio';
 import Corrosion from './pages/Corrosion';
 import NDT from './pages/NDT';
 import ThermalInsulation from './pages/ThermalInsulation';
+import Projects from './pages/Projects';
+import Contact from './pages/Contact';
 
 // Helper to scroll to top on route change
 const ScrollToTopHelper = () => {
@@ -32,7 +36,11 @@ const App: React.FC = () => {
           <Route path="services/corrosion" element={<Corrosion />} />
           <Route path="services/ndt" element={<NDT />} />
           <Route path="services/thermal-insulation" element={<ThermalInsulation />} />
+          <Route path="projects" element={<Projects />} />
           <Route path="about" element={<About />} />
+          <Route path="about/history" element={<History />} />
+          <Route path="about/team/:memberId" element={<TeamMemberBio />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
       </Routes>
     </HashRouter>

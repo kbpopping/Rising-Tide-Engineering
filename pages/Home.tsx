@@ -1,21 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 w-full cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all">
+           <div className="h-full bg-white dark:bg-slate-800 p-6 flex flex-col justify-between border-b-4 border-transparent hover:border-cta">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="font-bold text-lg text-slate-800 dark:text-white">{sector.title}</h3>
+                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">{sector.icon}</span>
+              </div>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{sector.desc}</p>
+              <div className="mt-4 text-xs text-cta font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                Click to flip
+              </div>
+           </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-6 flex flex-col justify-center items-center text-center rounded-lg border-2 border-cta shadow-xl">
+            <span className="material-symbols-outlined text-cta mb-3 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-xl font-bold text-white mb-2">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+              We provide specialized engineering solutions for the {sector.title} industry, ensuring operational excellence and safety.
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Home: React.FC = () => {
+  const sectors = [
+    { title: "Oil & Gas", icon: "oil_barrel", desc: "Upstream, midstream, and downstream integrity solutions." },
+    { title: "Petrochemical", icon: "science", desc: "Refinery maintenance and specialized chemical processing support." },
+    { title: "Construction", icon: "construction", desc: "Structural integrity and heavy civil engineering projects." },
+    { title: "Telecom", icon: "cell_tower", desc: "Tower maintenance and infrastructure development." },
+    { title: "Power & Energy", icon: "solar_power", desc: "Renewable energy installations and power plant maintenance." },
+    { title: "Mining", icon: "diamond", desc: "Equipment procurement and operational safety systems." },
+    { title: "Marine", icon: "anchor", desc: "Offshore vessel support and dockside engineering." },
+    { title: "Public Service", icon: "public", desc: "Government infrastructure and utility grid modernization." }
+  ];
+
   return (
     <div className="w-full">
       {/* Hero Section with Animation */}
       <section className="relative h-screen min-h-[700px] w-full overflow-hidden bg-slate-900">
         <div className="absolute inset-0 w-full h-full">
-          <div className="absolute inset-0 bg-cover bg-center animate-slide-1 opacity-0" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_gnMJt3U_EE7bhfmM-tgdkC3D-kXBKLnPk7wGHfDCpAfV9_9DrOHKPN1zFjDZZre7L0cEpiBGYRC6EjYTs10K3QXkp5RqoOZsdwzr4QNDq5Fv9Jv1fA_HdjidzQ7Bg4Y61A7EbbGXDK4G_21ohe0r_UJG5KYW8xNLLnyotDwZU8rAKCUH_iSwwPuvQRnCW0zGC9qYDv55C75KM0Ymqls-2mYIiZFWRsSPcmEWFmGxeGAaczD6B54XFPOxTpzQVCFpwkSM8XpQLB0")' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
-          </div>
-          <div className="absolute inset-0 bg-cover bg-center animate-slide-2 opacity-0" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAUEKWKPJv_Lub5604cyAplKm9poqS6UF0uOCT7HZUxrFXM3LlQ2HjKoqAUcf4__lExgEh6em1phkSPfp0jNZloavkCOeN7n304K41ykShEQj9c4ObH84j4GgDzsQHRKA9ru0hpBb_OWyPW8nw2PFVXPFjN2krVuqFsycElYOagJgd2rlauvBqfNpRNny_hvAWjYA1ysWgdmhgPLmrAAEk3ISpjww6asf99aHxuV4Z__SNo5tkLGB7TmsaMSesrzLOWH2Swa9AH9-g")' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
-          </div>
-          <div className="absolute inset-0 bg-cover bg-center animate-slide-3 opacity-0" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQmGHj4g2ujcWWdFbhBnXTffgNW-cy1bmBUlmgt34BcI2GIoDLEQKfasU-gmK6TrOG1yPL_sZhFxY_jFW3P0RlReyFcMBSWZRjDG6ufiio319X1qkKiTL2xkmm954lVKFH9Dly-7y-NcITWusCJg5mMPQI8_-HnPYlv9tiQEtMLSvI78VsVNw1Uwlgb0brzWoB_DI9u7jJZhPsRkDXXXTn6Il5isY4-CtRXEUTX0EcF7SnwxcCiw6oMAjdid3MoTBdJ821vOos1V8")' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
-          </div>
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="https://cdn.pixabay.com/video/2023/06/25/168758-839866847_large.mp4" type="video/mp4" />
+            {/* Fallback image if video fails or on data saver */}
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_gnMJt3U_EE7bhfmM-tgdkC3D-kXBKLnPk7wGHfDCpAfV9_9DrOHKPN1zFjDZZre7L0cEpiBGYRC6EjYTs10K3QXkp5RqoOZsdwzr4QNDq5Fv9Jv1fA_HdjidzQ7Bg4Y61A7EbbGXDK4G_21ohe0r_UJG5KYW8xNLLnyotDwZU8rAKCUH_iSwwPuvQRnCW0zGC9qYDv55C75KM0Ymqls-2mYIiZFWRsSPcmEWFmGxeGAaczD6B54XFPOxTpzQVCFpwkSM8XpQLB0" alt="Industrial Engineering" className="w-full h-full object-cover" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
         </div>
         
         <div className="relative z-20 h-full flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
@@ -128,62 +178,9 @@ const Home: React.FC = () => {
             <div className="h-1.5 w-24 bg-cta mx-auto rounded"></div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Oil & Gas</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">oil_barrel</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Upstream, midstream, and downstream integrity solutions.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Petrochemical</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">science</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Refinery maintenance and specialized chemical processing support.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Construction</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">construction</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Structural integrity and heavy civil engineering projects.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Telecom</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">cell_tower</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Tower maintenance and infrastructure development.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Power & Energy</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">solar_power</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Renewable energy installations and power plant maintenance.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Mining</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">diamond</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Equipment procurement and operational safety systems.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Marine</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">anchor</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Offshore vessel support and dockside engineering.</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 hover:-translate-y-1 group border-b-4 border-transparent hover:border-cta">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-slate-800 dark:text-white">Public Service</h3>
-                <span className="material-symbols-outlined text-cta text-3xl group-hover:scale-110 transition-transform">public</span>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Government infrastructure and utility grid modernization.</p>
-            </div>
+            {sectors.map((sector, index) => (
+              <SectorCard key={index} sector={sector} />
+            ))}
           </div>
         </div>
       </section>

@@ -1,4 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div 
+      className="group relative h-64 overflow-visible rounded-lg cursor-pointer perspective-1000"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+        {/* Front */}
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg">
+           <img src={sector.image} className="h-full w-full object-cover" alt={sector.title} />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+           <div className="absolute bottom-0 left-0 p-4 w-full">
+              <div className="flex items-center gap-2 text-safety mb-1">
+                <span className="material-symbols-outlined">{sector.icon}</span>
+              </div>
+              <h3 className="text-white font-bold text-xl">{sector.title}</h3>
+           </div>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full bg-slate-900 backface-hidden rotate-y-180 p-6 flex flex-col justify-center items-center text-center rounded-lg border-2 border-safety shadow-xl">
+            <span className="material-symbols-outlined text-safety mb-3 text-4xl animate-bounce">{sector.icon}</span>
+            <h3 className="text-xl font-bold text-white mb-2">{sector.title}</h3>
+            <p className="text-gray-300 text-sm leading-relaxed animate-fade-in-up">
+               Specialized corrosion control solutions for {sector.title}. Protecting your critical assets against environmental degradation.
+            </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Corrosion: React.FC = () => {
   const sectors = [
@@ -47,18 +82,24 @@ const Corrosion: React.FC = () => {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(20, 30, 22, 0.7) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuATqGw3Cn5w6edy7wdenYiKtwzPwHKbd_u8aTFxka-bO3AhOYlkQ0Kgg_guvE09zjpi4oYpAkyH0p1twgkRoOVD0otaY-lNW904Fd_FBQ6NoIgY050YtLeOnQabE-W8QIYqGRxnrxC6HvavJNZhaMYD08RtZzDm-_XhuiA_cDwsqSeyokEj_yHSFml8LFgGdoLlo4NM-YjiCWU3CdoElkre2YfDhm4l72yLYBhaF51wG_mWRrMS_xKiM57_ZX_VQYvFkr9nKe5n88I")' }}>
-        <div className="max-w-[960px] w-full px-6 flex flex-col items-center text-center gap-6">
-          <h1 className="text-white text-5xl md:text-6xl font-black leading-tight tracking-[-0.033em] uppercase drop-shadow-lg font-display">
-            Corrosion Control Engineering
-          </h1>
-          <p className="text-white/90 text-lg md:text-xl font-normal leading-relaxed max-w-2xl drop-shadow-md">
-            Industry-leading industrial corrosion inspection and advanced protective coating application services ensuring asset longevity.
-          </p>
-          <div className="mt-4">
-            <button className="bg-safety hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all transform hover:scale-105 shadow-lg">
-              View Capabilities
-            </button>
+      <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
+          style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(20, 30, 22, 0.7) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuATqGw3Cn5w6edy7wdenYiKtwzPwHKbd_u8aTFxka-bO3AhOYlkQ0Kgg_guvE09zjpi4oYpAkyH0p1twgkRoOVD0otaY-lNW904Fd_FBQ6NoIgY050YtLeOnQabE-W8QIYqGRxnrxC6HvavJNZhaMYD08RtZzDm-_XhuiA_cDwsqSeyokEj_yHSFml8LFgGdoLlo4NM-YjiCWU3CdoElkre2YfDhm4l72yLYBhaF51wG_mWRrMS_xKiM57_ZX_VQYvFkr9nKe5n88I")' }}
+        ></div>
+        <div className="absolute inset-0 flex items-center justify-center px-6 pointer-events-none">
+          <div className="max-w-[960px] w-full flex flex-col items-center text-center gap-6 pointer-events-auto">
+            <h1 className="text-white text-5xl md:text-6xl font-black leading-tight tracking-[-0.033em] uppercase drop-shadow-lg font-display animate-fade-in-up">
+              Corrosion Control Engineering
+            </h1>
+            <p className="text-white/90 text-lg md:text-xl font-normal leading-relaxed max-w-2xl drop-shadow-md animate-fade-in-up-delay-1">
+              Industry-leading industrial corrosion inspection and advanced protective coating application services ensuring asset longevity.
+            </p>
+            <div className="mt-4 animate-fade-in-up-delay-2">
+              <Link to="/projects" className="bg-safety hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all transform hover:scale-105 shadow-lg">
+                View Projects
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -173,19 +214,7 @@ const Corrosion: React.FC = () => {
           <h2 className="text-slate-900 text-3xl font-bold mb-10 border-l-4 border-safety pl-4">Sector Application</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {sectors.map((sector, index) => (
-              <div key={index} className="group relative h-64 overflow-hidden rounded-lg cursor-pointer">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
-                  style={{ backgroundImage: `url("${sector.image}")` }}
-                ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-4">
-                  <div className="flex items-center gap-2 text-safety mb-1">
-                    <span className="material-symbols-outlined">{sector.icon}</span>
-                  </div>
-                  <h3 className="text-white font-bold text-xl">{sector.title}</h3>
-                </div>
-              </div>
+              <SectorCard key={index} sector={sector} />
             ))}
           </div>
         </div>
