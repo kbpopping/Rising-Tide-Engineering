@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
@@ -34,6 +35,33 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
 };
 
 const NDT: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    service: 'Ultrasonic Testing (UT)'
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target; // Using 'name' attribute from elements
+    // Map the inputs to the state keys. The inputs in the original file didn't have name attributes.
+    // I will add name attributes to the inputs below.
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setFormData({ name: '', email: '', service: 'Ultrasonic Testing (UT)' });
+      setTimeout(() => setShowSuccess(false), 5000);
+    }, 1500);
+  };
+
   const sectors = [
     {
       title: "Oil & Gas",
@@ -86,7 +114,34 @@ const NDT: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-slate-50">
+    <div className="w-full bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div 
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full relative animate-fade-in-up flex flex-col items-center text-center gap-4 border border-slate-100 dark:border-slate-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowSuccess(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-2 shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">Request Sent!</h3>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+              We've received your NDT inquiry. Our inspection team will review your requirements and contact you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="relative w-full overflow-hidden h-[500px] flex items-center justify-center">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
@@ -109,93 +164,93 @@ const NDT: React.FC = () => {
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-16 lg:flex-row lg:px-8">
         <div className="flex flex-col gap-10 lg:w-2/3">
           <div className="prose max-w-none">
-            <h3 className="text-2xl font-bold text-primary mb-4 font-display">Inspection Methods</h3>
-            <p className="text-slate-600 leading-relaxed mb-6 font-body">
+            <h3 className="text-2xl font-bold text-primary dark:text-green-400 mb-4 font-display">Inspection Methods</h3>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6 font-body">
               Our Non-Destructive Testing (NDT) division employs state-of-the-art technology to detect flaws, cracks, and structural weaknesses in materials and components. By utilizing advanced ultrasonic, radiographic, and magnetic particle techniques, we provide actionable data that extends the lifecycle of your assets while maintaining operational continuity.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="flex items-start gap-3 p-4 rounded-lg bg-white border border-slate-200 shadow-sm">
+              <div className="flex items-start gap-3 p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <span className="material-symbols-outlined text-safety mt-1">verified_user</span>
                 <div>
-                  <h4 className="text-slate-900 font-bold font-display">Compliance Guaranteed</h4>
-                  <p className="text-sm text-slate-500 font-body">Fully compliant with ASME, API, and ISO standards.</p>
+                  <h4 className="text-slate-900 dark:text-white font-bold font-display">Compliance Guaranteed</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-body">Fully compliant with ASME, API, and ISO standards.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 rounded-lg bg-white border border-slate-200 shadow-sm">
+              <div className="flex items-start gap-3 p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <span className="material-symbols-outlined text-safety mt-1">analytics</span>
                 <div>
-                  <h4 className="text-slate-900 font-bold font-display">Data-Driven Reports</h4>
-                  <p className="text-sm text-slate-500 font-body">Comprehensive digital reporting with flaw sizing.</p>
+                  <h4 className="text-slate-900 dark:text-white font-bold font-display">Data-Driven Reports</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-body">Comprehensive digital reporting with flaw sizing.</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-bold text-primary mb-2 font-display">Technical Capabilities</h3>
-            <details className="group rounded-lg border border-slate-200 bg-white shadow-sm transition-all open:ring-1 open:ring-slate-200">
+            <h3 className="text-xl font-bold text-primary dark:text-green-400 mb-2 font-display">Technical Capabilities</h3>
+            <details className="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all open:ring-1 open:ring-slate-200 dark:open:ring-slate-700">
               <summary className="flex cursor-pointer items-center justify-between p-4 md:p-5 select-none">
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-safety/10 text-safety">
                     <span className="material-symbols-outlined">waves</span>
                   </div>
-                  <span className="text-lg font-bold text-slate-900 font-display">Ultrasonic Testing (UT)</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white font-display">Ultrasonic Testing (UT)</span>
                 </div>
                 <span className="material-symbols-outlined text-slate-400 transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <div className="border-t border-slate-100 px-5 py-4 text-slate-600 leading-relaxed bg-slate-50 font-body">
+              <div className="border-t border-slate-100 dark:border-slate-700 px-5 py-4 text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900 font-body">
                 <p className="mb-3">High-frequency sound waves are transmitted into materials to detect internal flaws or characterize materials. Ideal for weld inspections, thickness measurements, and flaw detection in forging.</p>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-slate-500">
+                <ul className="list-disc pl-5 space-y-1 text-sm text-slate-500 dark:text-slate-400">
                   <li>Phased Array Ultrasonic Testing (PAUT)</li>
                   <li>Time of Flight Diffraction (TOFD)</li>
                   <li>Automated Ultrasonic Testing (AUT)</li>
                 </ul>
               </div>
             </details>
-            <details className="group rounded-lg border border-slate-200 bg-white shadow-sm transition-all open:ring-1 open:ring-slate-200">
+            <details className="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all open:ring-1 open:ring-slate-200 dark:open:ring-slate-700">
               <summary className="flex cursor-pointer items-center justify-between p-4 md:p-5 select-none">
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-safety/10 text-safety">
                     <span className="material-symbols-outlined">radiology</span>
                   </div>
-                  <span className="text-lg font-bold text-slate-900 font-display">Radiographic Testing (RT)</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white font-display">Radiographic Testing (RT)</span>
                 </div>
                 <span className="material-symbols-outlined text-slate-400 transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <div className="border-t border-slate-100 px-5 py-4 text-slate-600 leading-relaxed bg-slate-50 font-body">
+              <div className="border-t border-slate-100 dark:border-slate-700 px-5 py-4 text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900 font-body">
                 <p className="mb-3">Uses X-rays or gamma rays to view the internal structure of a component. Provides a permanent record (film or digital image) of the internal quality.</p>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-slate-500">
+                <ul className="list-disc pl-5 space-y-1 text-sm text-slate-500 dark:text-slate-400">
                   <li>Computed Radiography (CR)</li>
                   <li>Digital Radiography (DR)</li>
                   <li>Profile Radiography</li>
                 </ul>
               </div>
             </details>
-            <details className="group rounded-lg border border-slate-200 bg-white shadow-sm transition-all open:ring-1 open:ring-slate-200">
+            <details className="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all open:ring-1 open:ring-slate-200 dark:open:ring-slate-700">
               <summary className="flex cursor-pointer items-center justify-between p-4 md:p-5 select-none">
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-safety/10 text-safety">
                     <span className="material-symbols-outlined">iron</span>
                   </div>
-                  <span className="text-lg font-bold text-slate-900 font-display">Magnetic Particle Inspection (MPI)</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white font-display">Magnetic Particle Inspection (MPI)</span>
                 </div>
                 <span className="material-symbols-outlined text-slate-400 transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <div className="border-t border-slate-100 px-5 py-4 text-slate-600 leading-relaxed bg-slate-50 font-body">
+              <div className="border-t border-slate-100 dark:border-slate-700 px-5 py-4 text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900 font-body">
                 <p>Used for detecting surface and slightly subsurface discontinuities in ferromagnetic materials such as iron, nickel, cobalt, and some of their alloys.</p>
               </div>
             </details>
-            <details className="group rounded-lg border border-slate-200 bg-white shadow-sm transition-all open:ring-1 open:ring-slate-200">
+            <details className="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all open:ring-1 open:ring-slate-200 dark:open:ring-slate-700">
               <summary className="flex cursor-pointer items-center justify-between p-4 md:p-5 select-none">
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-safety/10 text-safety">
                     <span className="material-symbols-outlined">water_drop</span>
                   </div>
-                  <span className="text-lg font-bold text-slate-900 font-display">Liquid Penetrant Testing (PT)</span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white font-display">Liquid Penetrant Testing (PT)</span>
                 </div>
                 <span className="material-symbols-outlined text-slate-400 transition-transform group-open:rotate-180">expand_more</span>
               </summary>
-              <div className="border-t border-slate-100 px-5 py-4 text-slate-600 leading-relaxed bg-slate-50 font-body">
+              <div className="border-t border-slate-100 dark:border-slate-700 px-5 py-4 text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900 font-body">
                 <p>A widely applied and low-cost inspection method used to check surface-breaking defects in all non-porous materials (metals, plastics, or ceramics).</p>
               </div>
             </details>
@@ -233,35 +288,60 @@ const NDT: React.FC = () => {
               </div>
             </div>
 
-            <div className="rounded-lg bg-white p-6 shadow-xl border border-slate-100">
-              <h3 className="text-xl font-bold text-slate-900 mb-4 font-display">Request a Quote</h3>
-              <form className="flex flex-col gap-4">
+            <div className="rounded-lg bg-white dark:bg-slate-800 p-6 shadow-xl border border-slate-100 dark:border-slate-700">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 font-display">Request a Quote</h3>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">Full Name</label>
-                  <input className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" placeholder="John Doe" type="text"/>
+                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Full Name</label>
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" 
+                    placeholder="John Doe" 
+                    type="text" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">Email Address</label>
-                  <input className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" placeholder="john@company.com" type="email"/>
+                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Email Address</label>
+                  <input 
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" 
+                    placeholder="john@company.com" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">Service Interest</label>
-                  <select className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none appearance-none">
+                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Service Interest</label>
+                  <select 
+                    name="service"
+                    value={formData.service}
+                    onChange={handleInputChange}
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none appearance-none"
+                  >
                     <option>Ultrasonic Testing (UT)</option>
                     <option>Radiographic Testing (RT)</option>
                     <option>Magnetic Particle (MPI)</option>
                     <option>General Inquiry</option>
                   </select>
                 </div>
-                <button className="mt-2 w-full rounded bg-safety py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20" type="button">
-                  Submit Request
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="mt-2 w-full rounded bg-safety py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Sending...' : 'Submit Request'}
                 </button>
               </form>
             </div>
 
-            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-slate-900 font-medium text-sm mb-2">Need immediate assistance?</p>
-              <a className="flex items-center gap-2 text-safety hover:text-slate-900 transition-colors" href="tel:+1234567890">
+            <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm">
+              <p className="text-slate-900 dark:text-white font-medium text-sm mb-2">Need immediate assistance?</p>
+              <a className="flex items-center gap-2 text-safety hover:text-slate-900 dark:hover:text-white transition-colors" href="tel:+1234567890">
                 <span className="material-symbols-outlined text-sm">call</span>
                 <span className="font-bold">+1 (800) 555-0199</span>
               </a>
@@ -270,12 +350,12 @@ const NDT: React.FC = () => {
         </div>
       </main>
 
-      <section className="w-full bg-slate-100 py-16 px-6 md:px-12 lg:px-20 xl:px-40">
+      <section className="w-full bg-slate-100 dark:bg-slate-800 py-16 px-6 md:px-12 lg:px-20 xl:px-40">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 font-display">Sector Applications</h2>
-              <p className="text-slate-600 max-w-2xl font-body">Tailored NDT solutions engineered for the specific demands of major industrial sectors.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3 font-display">Sector Applications</h2>
+              <p className="text-slate-600 dark:text-slate-400 max-w-2xl font-body">Tailored NDT solutions engineered for the specific demands of major industrial sectors.</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

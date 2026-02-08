@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,10 +36,27 @@
       }
     </script>
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Mobile Form Optimization: Prevents iOS zoom on focus */
+      @media screen and (max-width: 768px) {
+        input, select, textarea {
+          font-size: 16px !important;
+        }
+      }
+
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       }
-      /* Custom scrollbar for tech specs box */
+      
+      /* Custom scrollbar */
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
       }
@@ -50,6 +68,11 @@
         border-radius: 4px;
       }
       
+      /* Animation Performance Optimization */
+      .will-change-transform {
+        will-change: transform;
+      }
+
       /* Animations from Guide */
       @keyframes fadeZoom {
         0% { opacity: 0; transform: scale(1.1); }
@@ -68,6 +91,7 @@
       }
       .animate-scroll {
         animation: scroll 30s linear infinite;
+        will-change: transform; /* Performance fix for mobile */
       }
 
       /* Subtle Hero Animations */
@@ -93,6 +117,7 @@
       }
       .animate-ken-burns {
         animation: kenBurns 20s ease-out infinite alternate;
+        will-change: transform;
       }
 
       /* 3D Flip Card Styles */
@@ -118,6 +143,44 @@
           -ms-overflow-style: none;
           scrollbar-width: none;
       }
+
+      /* New Custom Animations */
+      @keyframes dissolveWobble {
+        0% {
+          opacity: 0;
+          transform: translateY(30px) rotate(-2deg);
+          filter: blur(10px);
+        }
+        30% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+        50% {
+          transform: rotate(2deg);
+        }
+        70% {
+          transform: rotate(-1deg);
+        }
+        100% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+      }
+      
+      .animate-dissolve-wobble {
+        animation: dissolveWobble 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      @keyframes bounceInterval {
+        0%, 85%, 100% { transform: translateY(0); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+        90% { transform: translateY(-15px); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        92% { transform: translateY(0); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+        95% { transform: translateY(-7px); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+      }
+      
+      .animate-bounce-interval {
+        animation: bounceInterval 5s infinite;
+      }
     </style>
   <script type="importmap">
 {
@@ -130,7 +193,7 @@
 }
 </script>
 </head>
-  <body class="bg-background-light text-slate-900 antialiased">
+  <body class="bg-background-light text-slate-900 antialiased overflow-x-hidden">
     <div id="root"></div>
   </body>
 </html>

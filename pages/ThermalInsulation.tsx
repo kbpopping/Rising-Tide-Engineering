@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
@@ -34,6 +35,32 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
 };
 
 const ThermalInsulation: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    service: 'Thermal Insulation'
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setFormData({ name: '', company: '', email: '', service: 'Thermal Insulation' });
+      setTimeout(() => setShowSuccess(false), 5000);
+    }, 1500);
+  };
+
   const sectors = [
     {
       title: "Oil & Gas",
@@ -86,7 +113,34 @@ const ThermalInsulation: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-slate-50">
+    <div className="w-full bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div 
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full relative animate-fade-in-up flex flex-col items-center text-center gap-4 border border-slate-100 dark:border-slate-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowSuccess(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-2 shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">Request Sent!</h3>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+              We've received your inquiry. Our thermal insulation experts will review your needs and contact you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="relative w-full overflow-hidden h-[500px] flex items-center justify-center bg-primary">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat animate-ken-burns" 
@@ -109,66 +163,66 @@ const ThermalInsulation: React.FC = () => {
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-16 lg:flex-row lg:px-8">
         <div className="flex flex-col gap-10 lg:w-2/3">
           <div className="flex flex-col gap-4">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 font-display border-b-2 border-safety pb-2 w-fit">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 font-display border-b-2 border-safety pb-2 w-fit">
               Insulation Materials &amp; Efficiency
             </h2>
-            <p className="text-slate-900 text-lg leading-relaxed mb-6 font-body">
+            <p className="text-slate-900 dark:text-white text-lg leading-relaxed mb-6 font-body">
               Our industrial insulation solutions are meticulously designed to minimize heat transfer, strictly control condensation, and ensure robust personnel protection in hazardous environments. We utilize advanced materials specifically selected for your operational constraints, including temperature extremes and chemical exposure.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="material-symbols-outlined text-safety text-3xl">thermostat</span>
-                  <h3 className="font-bold text-xl text-slate-900 font-display">Heat Conservation</h3>
+                  <h3 className="font-bold text-xl text-slate-900 dark:text-white font-display">Heat Conservation</h3>
                 </div>
-                <p className="text-sm text-slate-900 font-body">Drastically reduce energy costs by maintaining optimal process temperatures in piping and vessels.</p>
+                <p className="text-sm text-slate-900 dark:text-white font-body">Drastically reduce energy costs by maintaining optimal process temperatures in piping and vessels.</p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="material-symbols-outlined text-safety text-3xl">shield</span>
-                  <h3 className="font-bold text-xl text-slate-900 font-display">Personnel Protection</h3>
+                  <h3 className="font-bold text-xl text-slate-900 dark:text-white font-display">Personnel Protection</h3>
                 </div>
-                <p className="text-sm text-slate-900 font-body">Shielding surfaces exceeding 60°C to prevent burns and ensure compliance with safety regulations.</p>
+                <p className="text-sm text-slate-900 dark:text-white font-body">Shielding surfaces exceeding 60°C to prevent burns and ensure compliance with safety regulations.</p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="material-symbols-outlined text-safety text-3xl">water_drop</span>
-                  <h3 className="font-bold text-xl text-slate-900 font-display">Condensation Control</h3>
+                  <h3 className="font-bold text-xl text-slate-900 dark:text-white font-display">Condensation Control</h3>
                 </div>
-                <p className="text-sm text-slate-900 font-body">Preventing moisture buildup on cold systems (cryogenic) to avoid corrosion under insulation (CUI).</p>
+                <p className="text-sm text-slate-900 dark:text-white font-body">Preventing moisture buildup on cold systems (cryogenic) to avoid corrosion under insulation (CUI).</p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="material-symbols-outlined text-safety text-3xl">volume_off</span>
-                  <h3 className="font-bold text-xl text-slate-900 font-display">Acoustic Damping</h3>
+                  <h3 className="font-bold text-xl text-slate-900 dark:text-white font-display">Acoustic Damping</h3>
                 </div>
-                <p className="text-sm text-slate-900 font-body">Reducing noise pollution from high-pressure lines to meet environmental and OHS standards.</p>
+                <p className="text-sm text-slate-900 dark:text-white font-body">Reducing noise pollution from high-pressure lines to meet environmental and OHS standards.</p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-2xl font-bold font-display text-slate-900 mb-2">Premium Materials</h3>
+            <h3 className="text-2xl font-bold font-display text-slate-900 dark:text-white mb-2">Premium Materials</h3>
             <ul className="flex flex-col gap-3">
-              <li className="flex items-start gap-3 p-4 bg-white rounded-lg border border-slate-100 shadow-sm">
+              <li className="flex items-start gap-3 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
                 <span className="material-symbols-outlined text-safety mt-1">check_circle</span>
                 <div>
-                  <strong className="block text-slate-900 font-bold">Mineral Wool / Rockwool</strong>
-                  <span className="text-sm text-slate-900">Excellent fire resistance and acoustic properties. Ideal for high-temp piping.</span>
+                  <strong className="block text-slate-900 dark:text-white font-bold">Mineral Wool / Rockwool</strong>
+                  <span className="text-sm text-slate-900 dark:text-white">Excellent fire resistance and acoustic properties. Ideal for high-temp piping.</span>
                 </div>
               </li>
-              <li className="flex items-start gap-3 p-4 bg-white rounded-lg border border-slate-100 shadow-sm">
+              <li className="flex items-start gap-3 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
                 <span className="material-symbols-outlined text-safety mt-1">check_circle</span>
                 <div>
-                  <strong className="block text-slate-900 font-bold">Cellular Glass</strong>
-                  <span className="text-sm text-slate-900">Impermeable to moisture, non-combustible, and high compressive strength. Best for tank bases.</span>
+                  <strong className="block text-slate-900 dark:text-white font-bold">Cellular Glass</strong>
+                  <span className="text-sm text-slate-900 dark:text-white">Impermeable to moisture, non-combustible, and high compressive strength. Best for tank bases.</span>
                 </div>
               </li>
-              <li className="flex items-start gap-3 p-4 bg-white rounded-lg border border-slate-100 shadow-sm">
+              <li className="flex items-start gap-3 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm">
                 <span className="material-symbols-outlined text-safety mt-1">check_circle</span>
                 <div>
-                  <strong className="block text-slate-900 font-bold">Aerogel</strong>
-                  <span className="text-sm text-slate-900">Ultra-thin profile with superior thermal performance. Perfect for tight spaces.</span>
+                  <strong className="block text-slate-900 dark:text-white font-bold">Aerogel</strong>
+                  <span className="text-sm text-slate-900 dark:text-white">Ultra-thin profile with superior thermal performance. Perfect for tight spaces.</span>
                 </div>
               </li>
             </ul>
@@ -202,33 +256,66 @@ const ThermalInsulation: React.FC = () => {
               </div>
             </div>
 
-            <div className="rounded-lg bg-white p-6 shadow-lg border border-slate-200">
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 font-display">Request a Quote</h3>
-              <p className="text-sm text-slate-600 mb-6 font-body">Tell us about your project requirements.</p>
-              <form className="flex flex-col gap-4">
+            <div className="rounded-lg bg-white dark:bg-slate-800 p-6 shadow-lg border border-slate-200 dark:border-slate-700">
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white font-display">Request a Quote</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 font-body">Tell us about your project requirements.</p>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
-                  <input className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" placeholder="John Doe" type="text"/>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Full Name</label>
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    type="text" 
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" 
+                    placeholder="John Doe" 
+                    required
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Company</label>
-                  <input className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" placeholder="Engineering Ltd." type="text"/>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Company</label>
+                  <input 
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    type="text" 
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" 
+                    placeholder="Engineering Ltd." 
+                    required
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email</label>
-                  <input className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" placeholder="john@example.com" type="email"/>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Email</label>
+                  <input 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    type="email" 
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none" 
+                    placeholder="john@example.com" 
+                    required
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Service Type</label>
-                  <select className="w-full rounded bg-slate-50 border border-slate-300 px-3 py-2 text-slate-900 text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Service Type</label>
+                  <select 
+                    name="service"
+                    value={formData.service}
+                    onChange={handleInputChange}
+                    className="w-full rounded bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-2 text-slate-900 dark:text-white text-sm focus:border-safety focus:ring-1 focus:ring-safety outline-none"
+                  >
                     <option>Thermal Insulation</option>
                     <option>Acoustic Insulation</option>
                     <option>Cryogenic Insulation</option>
                     <option>Fireproofing</option>
                   </select>
                 </div>
-                <button className="mt-2 w-full rounded bg-safety py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20" type="button">
-                  Submit Request
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="mt-2 w-full rounded bg-safety py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Sending...' : 'Submit Request'}
                 </button>
               </form>
             </div>
@@ -236,12 +323,12 @@ const ThermalInsulation: React.FC = () => {
         </div>
       </main>
 
-      <section className="w-full bg-slate-100 py-16 px-6 md:px-12 lg:px-20 xl:px-40">
+      <section className="w-full bg-slate-100 dark:bg-slate-800 py-16 px-6 md:px-12 lg:px-20 xl:px-40">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 font-display border-b-2 border-safety pb-2 w-fit">Sector Applications</h2>
-              <p className="text-slate-600 max-w-2xl font-body mt-4">Tailored insulation solutions engineered for the specific demands of major industrial sectors.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3 font-display border-b-2 border-safety pb-2 w-fit">Sector Applications</h2>
+              <p className="text-slate-600 dark:text-slate-400 max-w-2xl font-body mt-4">Tailored insulation solutions engineered for the specific demands of major industrial sectors.</p>
             </div>
             <a href="#" className="text-safety font-bold flex items-center gap-1 hover:gap-2 transition-all">
               View All Sectors <span className="material-symbols-outlined">arrow_right_alt</span>

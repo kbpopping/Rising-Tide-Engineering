@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
@@ -36,6 +37,31 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
 };
 
 const AssetIntegrity: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    interest: 'Asset Integrity Management'
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setFormData({ name: '', email: '', interest: 'Asset Integrity Management' });
+      setTimeout(() => setShowSuccess(false), 5000);
+    }, 1500);
+  };
+
   const sectors = [
     { 
       title: "Oil & Gas", 
@@ -88,7 +114,34 @@ const AssetIntegrity: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-slate-50">
+    <div className="w-full bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div 
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full relative animate-fade-in-up flex flex-col items-center text-center gap-4 border border-slate-100 dark:border-slate-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowSuccess(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-2 shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">Request Sent!</h3>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+              We've received your request. Our asset integrity team will review your needs and contact you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Hero with Animations */}
       <header className="relative h-[500px] flex items-center w-full overflow-hidden">
         <div 
@@ -119,37 +172,37 @@ const AssetIntegrity: React.FC = () => {
           {/* Main Content Area */}
           <div className="lg:w-2/3 space-y-12">
             <section className="prose max-w-none">
-              <h2 className="text-3xl font-bold text-primary font-display mb-6">Overview</h2>
-              <p className="text-lg leading-relaxed text-slate-600">
+              <h2 className="text-3xl font-bold text-primary dark:text-green-400 font-display mb-6">Overview</h2>
+              <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
                 At The Rising Tide Engineering (TRTEL), our Asset Integrity Management (AIM) services are designed to ensure your assets perform their required function effectively and efficiently while protecting health, safety, and the environment. We combine deep engineering expertise with local Nigerian context to deliver lifecycle solutions for complex industrial facilities.
               </p>
-              <p className="text-lg leading-relaxed text-slate-600 mt-4">
+              <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300 mt-4">
                 Our methodology integrates design, operational, and technical integrity to maximize asset availability and profitability.
               </p>
             </section>
 
             <section>
-              <h3 className="text-2xl font-bold text-slate-900 mb-8 border-b border-gray-200 pb-4 font-display">Our Methodology</h3>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-gray-200 dark:border-gray-700 pb-4 font-display">Our Methodology</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="group bg-white p-6 rounded border border-gray-200 hover:border-safety transition-all duration-300 hover:shadow-lg">
+                <div className="group bg-white dark:bg-slate-800 p-6 rounded border border-gray-200 dark:border-gray-700 hover:border-safety transition-all duration-300 hover:shadow-lg">
                   <div className="w-12 h-12 bg-safety/10 rounded flex items-center justify-center mb-4 group-hover:bg-safety group-hover:text-white transition-colors duration-300 text-safety">
                     <span className="material-symbols-outlined">radar</span>
                   </div>
-                  <h4 className="font-bold text-lg mb-2 text-slate-900">Risk Assessment</h4>
-                  <p className="text-sm text-slate-500">Comprehensive RBI (Risk-Based Inspection) studies to prioritize critical assets.</p>
+                  <h4 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">Risk Assessment</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Comprehensive RBI (Risk-Based Inspection) studies to prioritize critical assets.</p>
                 </div>
-                <div className="group bg-white p-6 rounded border border-gray-200 hover:border-safety transition-all duration-300 hover:shadow-lg">
+                <div className="group bg-white dark:bg-slate-800 p-6 rounded border border-gray-200 dark:border-gray-700 hover:border-safety transition-all duration-300 hover:shadow-lg">
                   <div className="w-12 h-12 bg-safety/10 rounded flex items-center justify-center mb-4 group-hover:bg-safety group-hover:text-white transition-colors duration-300 text-safety">
                     <span className="material-symbols-outlined">engineering</span>
                   </div>
-                  <h4 className="font-bold text-lg mb-2 text-slate-900">Inspection Planning</h4>
-                  <p className="text-sm text-slate-500">Development of tailored inspection schemes compliant with DPR and global standards.</p>
+                  <h4 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">Inspection Planning</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Development of tailored inspection schemes compliant with DPR and global standards.</p>
                 </div>
               </div>
             </section>
 
             <section>
-              <h3 className="text-2xl font-bold text-slate-900 mb-8 border-b border-gray-200 pb-4 font-display">Sector Application</h3>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-gray-200 dark:border-gray-700 pb-4 font-display">Sector Application</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {sectors.map((sector, idx) => (
                   <SectorCard key={idx} sector={sector} />
@@ -185,33 +238,58 @@ const AssetIntegrity: React.FC = () => {
               </div>
             </div>
 
-            <div className="sticky top-24 bg-white p-6 rounded shadow-lg border border-gray-200">
+            <div className="sticky top-24 bg-white dark:bg-slate-800 p-6 rounded shadow-lg border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-safety text-white p-2 rounded-full">
                   <span className="material-symbols-outlined text-xl">mark_email_read</span>
                 </div>
-                <h3 className="font-bold text-xl text-slate-900 font-display">Request a Quote</h3>
+                <h3 className="font-bold text-xl text-slate-900 dark:text-white font-display">Request a Quote</h3>
               </div>
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
-                  <input className="w-full bg-slate-50 border border-gray-300 rounded px-3 py-2 text-slate-900 focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" placeholder="John Doe" type="text" />
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Full Name</label>
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" 
+                    placeholder="John Doe" 
+                    type="text" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Company Email</label>
-                  <input className="w-full bg-slate-50 border border-gray-300 rounded px-3 py-2 text-slate-900 focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" placeholder="john@company.com" type="email" />
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Company Email</label>
+                  <input 
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" 
+                    placeholder="john@company.com" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Service Interest</label>
-                  <select className="w-full bg-slate-50 border border-gray-300 rounded px-3 py-2 text-slate-900 focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow">
+                  <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Service Interest</label>
+                  <select 
+                    name="interest"
+                    value={formData.interest}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow"
+                  >
                     <option>Asset Integrity Management</option>
                     <option>Pipeline Maintenance</option>
                     <option>Structural Engineering</option>
                   </select>
                 </div>
-                <button className="w-full bg-primary hover:bg-green-800 text-white font-bold py-3 rounded transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2" type="button">
-                  <span>Submit Request</span>
-                  <span className="material-symbols-outlined text-sm">send</span>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-green-800 text-white font-bold py-3 rounded transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  <span>{isSubmitting ? 'Sending...' : 'Submit Request'}</span>
+                  {!isSubmitting && <span className="material-symbols-outlined text-sm">send</span>}
                 </button>
               </form>
             </div>

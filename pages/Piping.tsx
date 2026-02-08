@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -11,8 +12,8 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
     >
       <div className={`relative h-full w-full transition-all duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
         {/* Front */}
-        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg">
-           <img src={sector.image || sector.img} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
+        <div className="absolute inset-0 h-full w-full backface-hidden rounded-lg overflow-hidden shadow-lg bg-slate-900">
+           <img src={sector.image} className="h-full w-full object-cover transition-transform duration-500" alt={sector.title} />
            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
            <div className="absolute bottom-0 left-0 p-6 w-full">
              <span className="material-symbols-outlined text-safety mb-2 text-3xl">{sector.icon}</span>
@@ -35,6 +36,32 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
 };
 
 const Piping: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    requirements: ''
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setFormData({ name: '', email: '', company: '', requirements: '' });
+      setTimeout(() => setShowSuccess(false), 5000);
+    }, 1500);
+  };
+
   const sectors = [
     {
       title: "Oil & Gas",
@@ -59,35 +86,38 @@ const Piping: React.FC = () => {
       icon: "construction",
       desc: "Structural steel & piping.",
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBSg3wt1nG4BT19ayOP7_oo8c8V7TLjIy2_WLz4WBkpo31Uk9BOjFqugfPrVovyVeDxXVQ1PodEhD7UCYJuq46g-xptVW-KJk75q-Q3ifEm2RT6Fze5XgIDgJSb0vHc4QyOhQ9QLEBlLHuIvw-rygFpcdlUJShU_cFZ5_TP5NOWNoDQDPB1LEYH476UqxmHGS48SeSHx556Hy_KJY5Gxpd_oX9ai_a983UyHdALSzG1yjmJCSMCPhGWuA_P8RB32r4KUNixQYMOQQg"
-    },
-    {
-      title: "Telecommunications",
-      icon: "satellite_alt",
-      desc: "Tower support structures.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDOjwpy4CKMvMXMB91W-I1X8p3zkU9dBzdd6Vt0m8P-UYwjAHrMRL4gbZ3GvoYLKzHMXCcUiRIuTl5T2RKwbaIchOzRd55EHi1FtFwqt7MZSdLgXR1_tNGWp-phIbGMqO3P6TQpHAA126HDJXhARN7oJBgGyq4Viq9WSprrKiBYzyxY07JwqASEjZhlGBOsnfJQN5v526oaVcKmWl0WtiN7589oalrsRexH1jWgFE_KGKO8g1w7sQC1N22zNhe-GsXrIfxPZ8XPmi4"
-    },
-    {
-      title: "Mining & Minerals",
-      icon: "diamond",
-      desc: "Slurry pipelines.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBe6EuDocGsFD9XMSFwCWV3g7GoqIC-GjkYz8DpPrMKjuEMaUERl4rSYV-APUG-QTUYPufH0UKFR5XRmfDOablNmAdNpLdDv5SLhHK2xuOqGVrTKZDd5dw9ZyAXmA9IS47C4uBAr-nUt6fi5RgJWknbpBAzCjQgZ34JbdQGH42kMUyhc_tzdYXUO87juKKKgsx6RhH7c9hD0EPQtr7Qi4IVML5e5pOZ8pOv69W_SYH17fZkKOdwsnFAbBdcz0FcPqibw46JZ1lzuHw"
-    },
-    {
-      title: "Marine",
-      icon: "anchor",
-      desc: "Ship piping & retrofit.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCVuNazCbLzzFy69s281PSTGxVht9p6dxdJmShoQnQlQFum5vSyTRbHpRcc66-Mm68oqMOMGitS9hLwPL8PXuzoOaaX5sYoOgV2_rIMZQus5wt4yxo5UK5Hj0sw76oUZqCiSCX2YIFLNeU9w8gJG7qj-hnlsWGokSvMMWo368mVMKLl99jc-97FAlbatb0xxUVZeFz-dUcoryO8LYYwdL3hPElddJIMczwH5i20raWMWSO1WH7OtxPZZ3f0jM7j0Yk_J9glRMrhBeQ"
-    },
-    {
-      title: "Public Service",
-      icon: "water_drop",
-      desc: "Water & waste systems.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD2OjaepDFG3AE4ggBYSpeRapYVeXG3VQ9tlbUcUWY1BzKB6DSai0v6_kLrrCBN3vLOt10ZrkiHCz_1vopQBmgbYusfGgURYqDyAJwFFEC6OCVlvDqoVCS9dR5UlwI-rRXiF6k2urIlVTo_0jp6PTFmcOuf3r5loflSWMQHtmXC_h4TW9HlNXs4e_CylNRDNkcl-fjqiDdrc74lT2kBGalbKPSsuGKiVpmXLnnzeXNyVTyKAX_bZ25369jiaeUTTDBnSNqEfMIxXNo"
     }
   ];
 
   return (
-    <div className="w-full bg-slate-50">
+    <div className="w-full bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative">
+       {/* Success Modal */}
+       {showSuccess && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div 
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full relative animate-fade-in-up flex flex-col items-center text-center gap-4 border border-slate-100 dark:border-slate-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowSuccess(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-2 shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">Request Sent!</h3>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+              We've received your fabrication details. Our engineering team will review your specifications and contact you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="relative w-full h-[600px] overflow-hidden">
         <div 
@@ -110,8 +140,8 @@ const Piping: React.FC = () => {
               <Link to="/projects" className="flex items-center justify-center rounded-lg h-12 px-6 bg-safety hover:bg-orange-700 text-white font-bold transition-colors shadow-lg hover:shadow-orange-500/40 transform hover:-translate-y-1">
                 View Projects
               </Link>
-              <button className="flex items-center justify-center rounded-lg h-12 px-6 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold border border-white/20 transition-colors">
-                Download Brochure
+              <button onClick={() => document.getElementById('request-quote')?.scrollIntoView({ behavior: 'smooth' })} className="flex items-center justify-center rounded-lg h-12 px-6 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold border border-white/20 transition-colors">
+                Request Quote
               </button>
             </div>
           </div>
@@ -125,154 +155,132 @@ const Piping: React.FC = () => {
             <section>
               <div className="flex items-center gap-3 mb-4">
                 <span className="material-symbols-outlined text-safety text-3xl">precision_manufacturing</span>
-                <h2 className="text-3xl font-bold tracking-tight text-slate-900">Methodology & Approach</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Methodology & Approach</h2>
               </div>
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
-                <p className="text-base text-slate-600 leading-relaxed mb-6">
-                  Our fabrication process integrates advanced semi-automatic welding techniques with rigorous material handling protocols to ensure structural integrity under high pressure. We utilize a phased approach that minimizes downtime and maximizes safety.
-                </p>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Core Capabilities</h3>
-                <ul className="space-y-3">
-                  {["Off-site spool fabrication and modular assembly to reduce on-site welding time.", 
-                    "Specialized alloy welding (Inconel, Duplex, Super Duplex) for corrosive environments.",
-                    "3D laser scanning and BIM modeling for clash detection prior to installation.",
-                    "Hydrostatic and pneumatic pressure testing up to 15,000 PSI."].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-safety mt-0.5 shrink-0 text-xl">check_circle</span>
-                      <span className="text-slate-600">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
-
-            <section>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="material-symbols-outlined text-safety text-3xl">shield</span>
-                <h2 className="text-3xl font-bold tracking-tight text-slate-900">Quality Assurance & Safety</h2>
-              </div>
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
-                <p className="text-base text-slate-600 leading-relaxed mb-6">
-                  Safety is not just a policy; it is the foundation of our engineering philosophy. We adhere to strict ISO standards for all fabrication and installation projects, ensuring zero-harm environments.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-4 bg-slate-50 rounded-lg border-l-4 border-safety">
-                    <h4 className="font-bold text-slate-900 mb-2">Certifications</h4>
-                    <p className="text-sm text-slate-600">ASME B31.3, B31.1, API 1104, and ISO 9001:2015 certified welding procedures.</p>
-                  </div>
-                  <div className="p-4 bg-slate-50 rounded-lg border-l-4 border-safety">
-                    <h4 className="font-bold text-slate-900 mb-2">NDT Testing</h4>
-                    <p className="text-sm text-slate-600">100% Radiographic Testing (RT) and Ultrasonic Testing (UT) on critical joints.</p>
-                  </div>
+              <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                Our piping solutions are grounded in meticulous planning and advanced metallurgy. From initial isometrics to final hydro-testing, we strictly adhere to ASME B31.3 and API 1104 standards. Our fabrication yards are equipped with automated welding systems to ensure consistent joint quality and rapid project turnaround.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Shop Fabrication</h3>
+                   <ul className="space-y-2 text-slate-600 dark:text-slate-400">
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Automated orbital welding</li>
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Controlled environment fit-up</li>
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Spool hydro-testing</li>
+                   </ul>
+                </div>
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Field Installation</h3>
+                   <ul className="space-y-2 text-slate-600 dark:text-slate-400">
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Complex rigging & lifting</li>
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Flange management</li>
+                      <li className="flex items-center gap-2"><span className="material-symbols-outlined text-safety text-sm">check</span> Hot tapping services</li>
+                   </ul>
                 </div>
               </div>
             </section>
 
-            <div className="rounded-xl overflow-hidden h-64 md:h-80 w-full relative group shadow-lg">
-              <img alt="Pressure testing" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXMv6wu0tAF__0SmH-I1T75CvSt_M-mtDJocE-T0kLuJdP5O-ypXGjv1cNrIMizBxRrwO6i9-Qcl6uNdt4qNArSssautFj-kS71E4v5PXd7V4hfTFcaJ9Y4UTgo1aHDqBVlgtrdOFGTAzWlw_7AXKv4i6oOwnzfXjVNUbr8iRhxlUzCl9aUlkd_0XNuzdv6_QuSCFcHtmKkNwnaNXRcREcSQQHwvawztbiGJpwTh0irDyIR5Z0ZsDbSo0eSLX0_LqjvbJO4WHjJTs"/>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
-                <p className="text-white font-medium">Rigorous pressure testing ensures system integrity before commissioning.</p>
+             <section>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-6">Sector Application</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                 {sectors.map((sector, idx) => (
+                    <SectorCard key={idx} sector={sector} />
+                 ))}
               </div>
-            </div>
+            </section>
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-4 flex flex-col gap-8 relative">
-            <div className="sticky top-24 flex flex-col gap-8">
-              {/* Spec Sheet Widget */}
-              <div className="bg-slate-900 text-green-400 p-6 rounded-lg font-mono text-sm shadow-xl border border-slate-700 relative overflow-hidden">
-                <div className="flex items-center justify-between border-b border-slate-700 pb-3 mb-4 text-xs text-slate-500 uppercase tracking-widest">
-                  <span>// SPEC_SHEET_V2.4</span>
-                  <span className="flex h-2 w-2 rounded-full bg-safety animate-pulse"></span>
-                </div>
-                <div className="space-y-4 custom-scrollbar pr-2 max-h-[300px] overflow-y-auto">
-                  <div>
-                    <span className="text-slate-500 block mb-1">MATERIALS_SUPPORTED:</span>
-                    <p className="text-white">&gt; Carbon Steel (A106/A53)</p>
-                    <p className="text-white">&gt; Stainless Steel (304/316)</p>
-                    <p className="text-white">&gt; Duplex & Super Duplex</p>
-                    <p className="text-white">&gt; Inconel 625 / 825</p>
+          <div className="lg:col-span-4 flex flex-col gap-8">
+            <div className="bg-slate-900 rounded-xl p-8 text-white relative overflow-hidden shadow-2xl">
+               <div className="absolute top-0 right-0 p-4 opacity-10">
+                 <span className="material-symbols-outlined text-8xl">settings</span>
+               </div>
+               <h3 className="text-safety font-mono font-bold text-lg mb-6 uppercase tracking-wider">Technical Specs</h3>
+               <div className="space-y-4 font-mono text-sm">
+                  <div className="flex justify-between border-b border-gray-700 pb-2">
+                    <span className="text-gray-400">Diameter Range</span>
+                    <span className="font-bold">0.5" to 72"</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block mb-1">DIAMETER_RANGE:</span>
-                    <p className="text-white">&gt; Small Bore: 1/2" - 2"</p>
-                    <p className="text-white">&gt; Large Bore: 2" - 48"+</p>
+                  <div className="flex justify-between border-b border-gray-700 pb-2">
+                    <span className="text-gray-400">Materials</span>
+                    <span className="font-bold text-right">CS, SS, Duplex, Inconel</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block mb-1">PRESSURE_RATING:</span>
-                    <p className="text-white">&gt; Up to 10,000 PSI</p>
-                    <p className="text-white">&gt; ANSI Classes 150 - 2500</p>
+                  <div className="flex justify-between border-b border-gray-700 pb-2">
+                    <span className="text-gray-400">Pressure Class</span>
+                    <span className="font-bold">Up to #2500</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500 block mb-1">WELDING_PROCESSES:</span>
-                    <p className="text-white">&gt; GTAW (TIG)</p>
-                    <p className="text-white">&gt; SMAW (Stick)</p>
-                    <p className="text-white">&gt; GMAW (MIG/MAG)</p>
-                    <p className="text-white">&gt; FCAW (Flux Core)</p>
+                  <div className="flex justify-between pt-1">
+                    <span className="text-gray-400">NDT</span>
+                    <span className="font-bold text-right">100% RT/UT</span>
                   </div>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-700 text-xs text-slate-500 flex justify-between">
-                  <span>STATUS: ACTIVE</span>
-                  <span>[READ_ONLY]</span>
-                </div>
-              </div>
+               </div>
+            </div>
 
-              {/* Quote Form */}
-              <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary">
-                <h3 className="text-xl font-bold mb-1 text-slate-900">Request a Quote</h3>
-                <p className="text-sm text-slate-500 mb-6">Get a technical estimate for your fabrication needs.</p>
-                <form className="flex flex-col gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                    <input type="text" className="w-full rounded-md border-slate-300 bg-slate-50 p-2.5 text-sm focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" placeholder="John Doe" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Work Email</label>
-                    <input type="email" className="w-full rounded-md border-slate-300 bg-slate-50 p-2.5 text-sm focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" placeholder="john@company.com" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Project Type</label>
-                    <select className="w-full rounded-md border-slate-300 bg-slate-50 p-2.5 text-sm focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow text-slate-600">
-                      <option>Fabrication</option>
-                      <option>Installation</option>
-                      <option>Maintenance</option>
-                      <option>Turnkey Project</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Requirements</label>
-                    <textarea rows={3} className="w-full rounded-md border-slate-300 bg-slate-50 p-2.5 text-sm focus:ring-2 focus:ring-safety focus:border-transparent outline-none transition-shadow" placeholder="Briefly describe your project specs..."></textarea>
-                  </div>
-                  <button type="button" className="mt-2 w-full bg-safety hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 group">
-                    Submit Request
-                    <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                  </button>
-                </form>
-              </div>
+            <div id="request-quote" className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-xl border border-slate-100 dark:border-slate-700 sticky top-24">
+               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-display">Request a Quote</h3>
+               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Tell us about your project requirements.</p>
+               
+               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                 <div>
+                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Full Name</label>
+                   <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded p-2.5 text-sm outline-none focus:border-safety focus:ring-1 focus:ring-safety transition-all dark:text-white" 
+                    placeholder="John Doe" 
+                    required
+                   />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+                   <input 
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded p-2.5 text-sm outline-none focus:border-safety focus:ring-1 focus:ring-safety transition-all dark:text-white" 
+                    placeholder="john@company.com" 
+                    required
+                   />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Company</label>
+                   <input 
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded p-2.5 text-sm outline-none focus:border-safety focus:ring-1 focus:ring-safety transition-all dark:text-white" 
+                    placeholder="Company Ltd." 
+                    required
+                   />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Project Requirements</label>
+                   <textarea 
+                    name="requirements"
+                    value={formData.requirements}
+                    onChange={handleInputChange}
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded p-2.5 text-sm outline-none focus:border-safety focus:ring-1 focus:ring-safety transition-all h-24 resize-none dark:text-white" 
+                    placeholder="Describe your piping needs..." 
+                    required
+                   ></textarea>
+                 </div>
+                 <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="bg-safety hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                 >
+                   {isSubmitting ? 'Sending...' : 'Submit Request'}
+                   {!isSubmitting && <span className="material-symbols-outlined text-sm">send</span>}
+                 </button>
+               </form>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Sector Applications Section */}
-      <section className="w-full bg-slate-100 dark:bg-slate-900 py-16 px-6 md:px-12 lg:px-20 xl:px-40">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">Sector Applications</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-2xl">Tailored fabrication solutions engineered for the specific demands of major industrial sectors.</p>
-            </div>
-            <a href="#" className="text-safety font-bold flex items-center gap-1 hover:gap-2 transition-all">
-              View All Sectors <span className="material-symbols-outlined">arrow_right_alt</span>
-            </a>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {sectors.map((sector, index) => (
-              <SectorCard key={index} sector={sector} />
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

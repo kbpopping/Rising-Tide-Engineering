@@ -11,6 +11,9 @@ import Corrosion from './pages/Corrosion';
 import NDT from './pages/NDT';
 import ThermalInsulation from './pages/ThermalInsulation';
 import Projects from './pages/Projects';
+import ProjectCaseStudy from './pages/ProjectCaseStudy';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 
 // Helper to scroll to top on route change
@@ -37,9 +40,12 @@ const App: React.FC = () => {
           <Route path="services/ndt" element={<NDT />} />
           <Route path="services/thermal-insulation" element={<ThermalInsulation />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="projects/:projectId" element={<ProjectCaseStudy />} />
           <Route path="about" element={<About />} />
           <Route path="about/history" element={<History />} />
           <Route path="about/team/:memberId" element={<TeamMemberBio />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/:blogId" element={<BlogPost />} />
           <Route path="contact" element={<Contact />} />
         </Route>
       </Routes>

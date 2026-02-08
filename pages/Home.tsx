@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
@@ -49,85 +50,135 @@ const Home: React.FC = () => {
     { title: "Public Service", icon: "public", desc: "Government infrastructure and utility grid modernization." }
   ];
 
+  const heroImages = [
+    "https://imgur.com/pqYmHu6.jpeg",
+    "https://i.imgur.com/90PGbCs.jpeg",
+    "https://i.imgur.com/2UKpH6s.jpeg"
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [animateText, setAnimateText] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  // Hero Image Slider
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
+  // Intersection Observer for Hero Text Animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAnimateText(false); // Reset to trigger re-flow
+          setTimeout(() => setAnimateText(true), 10);
+        } else {
+          setAnimateText(false);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => {
+      if (heroRef.current) {
+        observer.unobserve(heroRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section with Animation */}
-      <section className="relative h-screen min-h-[700px] w-full overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 w-full h-full">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="absolute inset-0 w-full h-full object-cover"
+      <section ref={heroRef} className="relative h-screen min-h-[500px] md:min-h-[700px] w-full overflow-hidden bg-slate-900">
+        {/* Image Slider */}
+        {heroImages.map((img, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
           >
-            <source src="https://cdn.pixabay.com/video/2023/06/25/168758-839866847_large.mp4" type="video/mp4" />
-            {/* Fallback image if video fails or on data saver */}
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_gnMJt3U_EE7bhfmM-tgdkC3D-kXBKLnPk7wGHfDCpAfV9_9DrOHKPN1zFjDZZre7L0cEpiBGYRC6EjYTs10K3QXkp5RqoOZsdwzr4QNDq5Fv9Jv1fA_HdjidzQ7Bg4Y61A7EbbGXDK4G_21ohe0r_UJG5KYW8xNLLnyotDwZU8rAKCUH_iSwwPuvQRnCW0zGC9qYDv55C75KM0Ymqls-2mYIiZFWRsSPcmEWFmGxeGAaczD6B54XFPOxTpzQVCFpwkSM8XpQLB0" alt="Industrial Engineering" className="w-full h-full object-cover" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
-        </div>
+            <img 
+              src={img} 
+              alt={`Engineering Slide ${index + 1}`} 
+              className="w-full h-full object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+          </div>
+        ))}
         
         <div className="relative z-20 h-full flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto space-y-8">
-            <div className="inline-block px-4 py-2 bg-cta text-white font-bold text-sm uppercase tracking-widest rounded mb-4 animate-bounce">
+          <div className="max-w-5xl mx-auto space-y-6 md:space-y-8">
+            <div className={`inline-block px-4 py-2 bg-cta text-white font-bold text-xs md:text-sm uppercase tracking-widest rounded mb-2 md:mb-4 ${animateText ? 'animate-dissolve-wobble' : 'opacity-0'}`}>
               Engineering Excellence
             </div>
-            <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl text-white leading-tight drop-shadow-lg">
+            <h1 className={`font-display font-black text-4xl md:text-7xl lg:text-8xl text-white leading-tight drop-shadow-lg ${animateText ? 'animate-dissolve-wobble' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
               THE RISING TIDE <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-cta to-yellow-400">ENGINEERING</span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
+            <p className={`text-lg md:text-2xl text-slate-200 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md ${animateText ? 'animate-dissolve-wobble' : 'opacity-0'}`} style={{ animationDelay: '0.4s' }}>
               Pioneering asset integrity, corrosion control, and specialized procurement for Nigeria's industrial future.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-              <Link to="/services/piping" className="bg-cta hover:bg-orange-600 text-white text-lg font-bold py-4 px-10 rounded shadow-xl hover:shadow-orange-500/40 transition-all transform hover:-translate-y-1">
+            <div className={`flex flex-col sm:flex-row gap-4 md:gap-6 justify-center pt-4 md:pt-8 ${animateText ? 'animate-dissolve-wobble' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
+              <Link to="/services/piping" className="bg-cta hover:bg-orange-600 text-white text-base md:text-lg font-bold py-3 md:py-4 px-8 md:px-10 rounded shadow-xl hover:shadow-orange-500/40 transition-all transform hover:-translate-y-1">
                 Explore Our Services
               </Link>
-              <Link to="/about" className="bg-white/10 backdrop-blur-sm border-2 border-white hover:bg-white hover:text-primary text-white text-lg font-bold py-4 px-10 rounded shadow-xl transition-all transform hover:-translate-y-1">
+              <Link to="/about" className="bg-white/10 backdrop-blur-sm border-2 border-white hover:bg-white hover:text-primary text-white text-base md:text-lg font-bold py-3 md:py-4 px-8 md:px-10 rounded shadow-xl transition-all transform hover:-translate-y-1">
                 View Projects
               </Link>
             </div>
           </div>
         </div>
         
-        <div className="absolute bottom-10 left-0 right-0 flex justify-center gap-3 z-30">
-          <div className="h-1.5 w-16 bg-cta rounded-full"></div>
-          <div className="h-1.5 w-4 bg-white/50 rounded-full"></div>
-          <div className="h-1.5 w-4 bg-white/50 rounded-full"></div>
+        <div className="absolute bottom-6 md:bottom-10 left-0 right-0 flex justify-center gap-3 z-30">
+          {heroImages.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-12 md:w-16 bg-cta' : 'w-3 md:w-4 bg-white/50 hover:bg-white'}`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="bg-primary text-white py-16 relative overflow-hidden border-b-4 border-cta">
+      <section className="bg-primary text-white py-12 md:py-16 relative overflow-hidden border-b-4 border-cta">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
-            <div className="p-4">
-              <div className="text-4xl md:text-5xl font-display font-black text-cta mb-2">30+</div>
-              <div className="text-sm font-bold text-white/90 uppercase tracking-widest">Years Experience</div>
+            <div className="p-2 md:p-4">
+              <div className="text-3xl md:text-5xl font-display font-black text-cta mb-2">30+</div>
+              <div className="text-xs md:text-sm font-bold text-white/90 uppercase tracking-widest">Years Experience</div>
             </div>
-            <div className="p-4">
-              <div className="text-4xl md:text-5xl font-display font-black text-cta mb-2">150+</div>
-              <div className="text-sm font-bold text-white/90 uppercase tracking-widest">Projects Done</div>
+            <div className="p-2 md:p-4">
+              <div className="text-3xl md:text-5xl font-display font-black text-cta mb-2">150+</div>
+              <div className="text-xs md:text-sm font-bold text-white/90 uppercase tracking-widest">Projects Done</div>
             </div>
-            <div className="p-4">
-              <div className="text-4xl md:text-5xl font-display font-black text-cta mb-2">100%</div>
-              <div className="text-sm font-bold text-white/90 uppercase tracking-widest">Safety Record</div>
+            <div className="p-2 md:p-4">
+              <div className="text-3xl md:text-5xl font-display font-black text-cta mb-2">100%</div>
+              <div className="text-xs md:text-sm font-bold text-white/90 uppercase tracking-widest">Safety Record</div>
             </div>
-            <div className="p-4">
-              <div className="text-4xl md:text-5xl font-display font-black text-cta mb-2">ISO</div>
-              <div className="text-sm font-bold text-white/90 uppercase tracking-widest">Certified</div>
+            <div className="p-2 md:p-4">
+              <div className="text-3xl md:text-5xl font-display font-black text-cta mb-2">ISO</div>
+              <div className="text-xs md:text-sm font-bold text-white/90 uppercase tracking-widest">Certified</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Services Grid (Core Competencies) */}
-      <section className="py-24 bg-white dark:bg-slate-900" id="services">
+      <section className="py-16 md:py-24 bg-white dark:bg-slate-900" id="services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl font-black text-slate-900 dark:text-white mb-4">Core Competencies</h2>
+          <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+            <h2 className="font-display text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">Core Competencies</h2>
             <div className="h-1.5 w-24 bg-cta mx-auto rounded mb-6"></div>
-            <p className="text-slate-600 dark:text-slate-400 text-lg font-medium">Delivering specialized engineering solutions tailored to unique challenges.</p>
+            <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg font-medium">Delivering specialized engineering solutions tailored to unique challenges.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -171,10 +222,10 @@ const Home: React.FC = () => {
       </section>
 
       {/* Sector Applications */}
-      <section className="py-24 bg-slate-50 dark:bg-slate-800/50 relative" id="sectors">
+      <section className="py-16 md:py-24 bg-slate-50 dark:bg-slate-800/50 relative" id="sectors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl font-black text-slate-900 dark:text-white mb-4">Sector Applications</h2>
+          <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+            <h2 className="font-display text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">Sector Applications</h2>
             <div className="h-1.5 w-24 bg-cta mx-auto rounded"></div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -186,48 +237,92 @@ const Home: React.FC = () => {
       </section>
 
       {/* Why Partner With TRTEL */}
-      <section className="py-24 bg-white dark:bg-slate-900">
+      <section className="py-16 md:py-24 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Video Section */}
             <div className="relative group">
               <div className="absolute -inset-2 bg-gradient-to-r from-cta to-secondary rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video bg-slate-900">
-                <img alt="Engineering site work" className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdQUmZ06EIVb18Tg513rP9fTzNmKT_CdHDc3jhkC11acnTddY8RdWllwbFpLYdYKxULxGJ0lMfco-memgB9HjRyKAhMoAEkH_c_YqBs2kLn2rjGyqqB67Nj-C0a9p-AIAhOiYatyfzD5KRauC7-Rbw_ckSdWYRs-XIgaxpREFR0W_qybJUTQDLeWmcq9GSW2EsMKISQjfo0fVrBjIAQvGCEklyGW6tQkSGeb-7cswdHyLlhIQjvPLK6ibh8SJgs0C75MyMCDWEZBw"/>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <button className="w-20 h-20 bg-cta hover:bg-white text-white hover:text-cta rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110">
-                    <span className="material-symbols-outlined text-5xl ml-1">play_arrow</span>
-                  </button>
-                </div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video bg-slate-900 border border-slate-800">
+                {!showVideo ? (
+                  <>
+                    <img 
+                      alt="Engineering site work" 
+                      className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" 
+                      src="https://img.youtube.com/vi/UV0mhY2Dxr0/maxresdefault.jpg"
+                      loading="lazy" 
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <button 
+                        onClick={() => setShowVideo(true)}
+                        className="w-16 h-16 md:w-20 md:h-20 bg-cta hover:bg-white text-white hover:text-cta rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110 hover:rotate-12"
+                        aria-label="Play Video"
+                      >
+                        <span className="material-symbols-outlined text-4xl md:text-5xl ml-1">play_arrow</span>
+                      </button>
+                    </div>
+                    <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded text-white text-xs font-bold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm text-safety">timer</span> PREVIEW: 60s
+                    </div>
+                  </>
+                ) : (
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://www.youtube.com/embed/UV0mhY2Dxr0?autoplay=1&mute=1" 
+                    title="YouTube video player" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowFullScreen
+                    className="w-full h-full"
+                  ></iframe>
+                )}
               </div>
+              {showVideo && (
+                <div className="flex justify-center mt-6 animate-fade-in-up">
+                    <a 
+                        href="https://youtu.be/UV0mhY2Dxr0" 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-6 py-3 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:border-cta hover:text-cta transition-all transform hover:-translate-y-0.5 font-bold text-sm group"
+                    >
+                        <span className="material-symbols-outlined text-cta">smart_display</span>
+                        Watch Full Video on YouTube
+                        <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">open_in_new</span>
+                    </a>
+                </div>
+              )}
             </div>
-            <div className="space-y-10">
-              <h2 className="font-display text-4xl font-black text-slate-900 dark:text-white">Why Partner With <span className="text-cta">TRTEL</span>?</h2>
-              <div className="space-y-8">
+
+            {/* Text Content */}
+            <div className="space-y-8 md:space-y-10">
+              <h2 className="font-display text-3xl md:text-4xl font-black text-slate-900 dark:text-white">Why Partner With <span className="text-cta">TRTEL</span>?</h2>
+              <div className="space-y-6 md:space-y-8">
                 <div className="flex gap-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
-                    <span className="material-symbols-outlined text-3xl">verified</span>
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
+                    <span className="material-symbols-outlined text-2xl md:text-3xl">verified</span>
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Local Content Champion</h4>
-                    <p className="text-slate-600 dark:text-slate-400">Deeply rooted in Nigeria with a commitment to developing local talent and resources while meeting global standards.</p>
+                    <h4 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-2">Local Content Champion</h4>
+                    <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">Deeply rooted in Nigeria with a commitment to developing local talent and resources while meeting global standards.</p>
                   </div>
                 </div>
                 <div className="flex gap-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
-                    <span className="material-symbols-outlined text-3xl">engineering</span>
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
+                    <span className="material-symbols-outlined text-2xl md:text-3xl">engineering</span>
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Technical Superiority</h4>
-                    <p className="text-slate-600 dark:text-slate-400">Our team consists of COREN certified engineers utilizing state-of-the-art software and diagnostic tools.</p>
+                    <h4 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-2">Technical Superiority</h4>
+                    <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">Our team consists of COREN certified engineers utilizing state-of-the-art software and diagnostic tools.</p>
                   </div>
                 </div>
                 <div className="flex gap-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
-                    <span className="material-symbols-outlined text-3xl">handshake</span>
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-orange-100 dark:bg-slate-800 flex items-center justify-center text-cta shadow-sm">
+                    <span className="material-symbols-outlined text-2xl md:text-3xl">handshake</span>
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Integrity-First Approach</h4>
-                    <p className="text-slate-600 dark:text-slate-400">Transparent project management and ethical procurement practices are the bedrock of our client relationships.</p>
+                    <h4 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-2">Integrity-First Approach</h4>
+                    <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">Transparent project management and ethical procurement practices are the bedrock of our client relationships.</p>
                   </div>
                 </div>
               </div>
@@ -242,33 +337,33 @@ const Home: React.FC = () => {
           <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-400">Trusted By Industry Leaders</p>
         </div>
         <div className="relative w-full overflow-hidden">
-          <div className="flex w-[200%] animate-scroll">
-            <div className="flex w-1/2 justify-around items-center px-10 gap-12">
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">SHELL</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">CHEVRON</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">TOTAL</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">EXXON</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">NLNG</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">SEPLAT</div>
+          <div className="flex w-[200%] animate-scroll will-change-transform">
+            <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-12">
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">SHELL</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">CHEVRON</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">TOTAL</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">EXXON</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">NLNG</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">SEPLAT</div>
             </div>
-            <div className="flex w-1/2 justify-around items-center px-10 gap-12">
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">SHELL</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">CHEVRON</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">TOTAL</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">EXXON</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">NLNG</div>
-              <div className="text-2xl font-black text-slate-300 dark:text-slate-600">SEPLAT</div>
+            <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-12">
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">SHELL</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">CHEVRON</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">TOTAL</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">EXXON</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">NLNG</div>
+              <div className="text-xl md:text-2xl font-black text-slate-300 dark:text-slate-600">SEPLAT</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Client Testimonials */}
-      <section className="py-24 bg-white dark:bg-slate-900 overflow-hidden">
+      <section className="py-16 md:py-24 bg-white dark:bg-slate-900 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-4xl font-black text-center text-slate-900 dark:text-white mb-16">Client Testimonials</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-black text-center text-slate-900 dark:text-white mb-12 md:mb-16">Client Testimonials</h2>
           <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide">
-            <div className="snap-center shrink-0 w-full md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
+            <div className="snap-center shrink-0 w-[85vw] md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
               <div className="flex text-cta mb-4">
                 <span className="material-symbols-outlined text-sm">star</span>
                 <span className="material-symbols-outlined text-sm">star</span>
@@ -285,7 +380,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="snap-center shrink-0 w-full md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
+            <div className="snap-center shrink-0 w-[85vw] md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
               <div className="flex text-cta mb-4">
                 <span className="material-symbols-outlined text-sm">star</span>
                 <span className="material-symbols-outlined text-sm">star</span>
@@ -302,7 +397,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="snap-center shrink-0 w-full md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
+            <div className="snap-center shrink-0 w-[85vw] md:w-[400px] bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
               <div className="flex text-cta mb-4">
                 <span className="material-symbols-outlined text-sm">star</span>
                 <span className="material-symbols-outlined text-sm">star</span>
@@ -324,20 +419,20 @@ const Home: React.FC = () => {
       </section>
 
       {/* Ready to Elevate Your Project Standards? (CTA) */}
-      <section className="py-24 relative overflow-hidden bg-cta" id="contact">
+      <section className="py-16 md:py-24 relative overflow-hidden bg-cta" id="contact">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="absolute inset-y-0 left-0 w-1/2 bg-white/5 skew-x-12 transform origin-top-left"></div>
         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white text-cta mb-8 shadow-lg">
-            <span className="material-symbols-outlined text-4xl">rocket_launch</span>
+          <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-white text-cta mb-6 md:mb-8 shadow-lg">
+            <span className="material-symbols-outlined text-3xl md:text-4xl">rocket_launch</span>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl font-black text-white mb-6">Ready to Elevate Your Project Standards?</h2>
+          <h2 className="font-display text-3xl md:text-5xl font-black text-white mb-6">Ready to Elevate Your Project Standards?</h2>
           <p className="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-medium">Contact our engineering team today for a consultation on your next asset integrity or procurement project.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-cta hover:bg-slate-100 font-bold py-4 px-10 rounded shadow-xl transition-transform transform hover:-translate-y-1 text-lg">
+            <Link to="/contact" className="bg-white text-cta hover:bg-slate-100 font-bold py-4 px-10 rounded shadow-xl transition-all transform hover:-translate-y-1 text-lg hover:shadow-[0_0_25px_rgba(255,255,255,0.6)]">
               Request Consultation
-            </button>
-            <button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold py-4 px-10 rounded transition-colors text-lg">
+            </Link>
+            <button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold py-4 px-10 rounded transition-all text-lg hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]">
               Download Corporate Profile
             </button>
           </div>

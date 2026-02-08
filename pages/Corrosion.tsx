@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -36,6 +37,32 @@ const SectorCard: React.FC<{ sector: any }> = ({ sector }) => {
 };
 
 const Corrosion: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    details: ''
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setFormData({ name: '', company: '', email: '', details: '' });
+      setTimeout(() => setShowSuccess(false), 5000);
+    }, 1500);
+  };
+
   const sectors = [
     {
       title: "Oil & Gas",
@@ -80,7 +107,34 @@ const Corrosion: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white dark:bg-slate-900 min-h-screen transition-colors duration-300 relative">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setShowSuccess(false)}
+        >
+          <div 
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full relative animate-fade-in-up flex flex-col items-center text-center gap-4 border border-slate-100 dark:border-slate-700"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowSuccess(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-2 shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">Request Sent!</h3>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+              We've received your corrosion control details. Our engineering team will review your specifications and contact you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
         <div 
@@ -107,11 +161,11 @@ const Corrosion: React.FC = () => {
       <main className="w-full max-w-[1440px] mx-auto px-6 py-16 flex flex-col lg:flex-row gap-12">
         <div className="w-full lg:w-2/3 flex flex-col gap-8">
           <div>
-            <h2 className="text-slate-900 text-3xl md:text-4xl font-bold leading-tight mb-6 font-display">Technical Expertise</h2>
-            <p className="text-slate-700 text-lg leading-relaxed mb-6">
+            <h2 className="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold leading-tight mb-6 font-display">Technical Expertise</h2>
+            <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-6">
               Corrosion is a pervasive threat to industrial infrastructure, compromising structural integrity and safety. Our engineering team specializes in comprehensive corrosion management, employing a multi-faceted approach that combines advanced materials science with rigorous field application standards. We don't just apply coatings; we engineer longevity.
             </p>
-            <p className="text-slate-700 text-lg leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed">
               From initial surface preparation analysis to the final curing of high-performance polymer composites, every step of our process is monitored and validated against international standards. Our holistic strategy minimizes downtime and maximizes the lifecycle of your critical assets in the harshest environments.
             </p>
           </div>
@@ -123,12 +177,12 @@ const Corrosion: React.FC = () => {
               { title: "NACE Inspection", icon: "fact_check", desc: "Certified inspectors conducting DFT measurements, holiday testing, and adhesion pull-off tests to verify compliance." },
               { title: "Surface Preparation", icon: "construction", desc: "Abrasive blasting and chemical cleaning to achieve SSPC-SP 10/NACE No. 2 Near-White Metal standards." }
             ].map((item, i) => (
-              <div key={i} className="bg-slate-50 p-6 rounded-lg border border-slate-200 shadow-sm">
+              <div key={i} className="bg-slate-50 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-safety/10 flex items-center justify-center mb-4">
                   <span className="material-symbols-outlined text-safety text-3xl">{item.icon}</span>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-slate-900">{item.title}</h3>
-                <p className="text-sm text-slate-600">{item.desc}</p>
+                <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -144,36 +198,36 @@ const Corrosion: React.FC = () => {
         </div>
 
         <div className="w-full lg:w-1/3 flex flex-col gap-8">
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
-            <h3 className="text-lg font-bold uppercase tracking-wide text-primary mb-4 flex items-center gap-2">
+          <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+            <h3 className="text-lg font-bold uppercase tracking-wide text-primary dark:text-green-400 mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-safety">tune</span>
               Technical Specs
             </h3>
             <ul className="space-y-3 font-body text-sm">
-              <li className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">Preparation Std</span>
-                <span className="font-medium text-slate-900">ISO 8501-1</span>
+              <li className="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                <span className="text-slate-600 dark:text-slate-400">Preparation Std</span>
+                <span className="font-medium text-slate-900 dark:text-white">ISO 8501-1</span>
               </li>
-              <li className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">Coating Thickness</span>
-                <span className="font-medium text-slate-900">ASTM D7091</span>
+              <li className="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                <span className="text-slate-600 dark:text-slate-400">Coating Thickness</span>
+                <span className="font-medium text-slate-900 dark:text-white">ASTM D7091</span>
               </li>
-              <li className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">Adhesion Test</span>
-                <span className="font-medium text-slate-900">ASTM D4541</span>
+              <li className="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                <span className="text-slate-600 dark:text-slate-400">Adhesion Test</span>
+                <span className="font-medium text-slate-900 dark:text-white">ASTM D4541</span>
               </li>
-              <li className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-600">Salt Level</span>
-                <span className="font-medium text-slate-900">&lt; 20 mg/m²</span>
+              <li className="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                <span className="text-slate-600 dark:text-slate-400">Salt Level</span>
+                <span className="font-medium text-slate-900 dark:text-white">&lt; 20 mg/m²</span>
               </li>
               <li className="flex justify-between pt-1">
-                <span className="text-slate-600">Certifications</span>
-                <span className="font-medium text-slate-900 text-right">NACE Level 3<br/>SSPC PCI</span>
+                <span className="text-slate-600 dark:text-slate-400">Certifications</span>
+                <span className="font-medium text-slate-900 dark:text-white text-right">NACE Level 3<br/>SSPC PCI</span>
               </li>
             </ul>
           </div>
 
-          <div className="sticky top-24 bg-white rounded-lg shadow-lg border border-slate-100 overflow-hidden">
+          <div className="sticky top-24 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
             <div className="bg-primary p-4">
               <h3 className="text-white font-bold text-lg flex items-center gap-2">
                 <span className="material-symbols-outlined">request_quote</span>
@@ -181,26 +235,62 @@ const Corrosion: React.FC = () => {
               </h3>
             </div>
             <div className="p-6">
-              <form className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                  <input type="text" className="w-full rounded-md border-slate-300 bg-slate-50 p-2 text-sm focus:border-primary focus:ring-primary" placeholder="John Doe" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+                  <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    type="text" 
+                    className="w-full rounded-md border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-2 text-sm focus:border-primary focus:ring-primary dark:text-white" 
+                    placeholder="John Doe" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Company</label>
-                  <input type="text" className="w-full rounded-md border-slate-300 bg-slate-50 p-2 text-sm focus:border-primary focus:ring-primary" placeholder="Organization Ltd." />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Company</label>
+                  <input 
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    type="text" 
+                    className="w-full rounded-md border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-2 text-sm focus:border-primary focus:ring-primary dark:text-white" 
+                    placeholder="Organization Ltd." 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
-                  <input type="email" className="w-full rounded-md border-slate-300 bg-slate-50 p-2 text-sm focus:border-primary focus:ring-primary" placeholder="john@example.com" />
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
+                  <input 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    type="email" 
+                    className="w-full rounded-md border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-2 text-sm focus:border-primary focus:ring-primary dark:text-white" 
+                    placeholder="john@example.com" 
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Project Details</label>
-                  <textarea rows={3} className="w-full rounded-md border-slate-300 bg-slate-50 p-2 text-sm focus:border-primary focus:ring-primary" placeholder="Describe your corrosion issues..."></textarea>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Project Details</label>
+                  <textarea 
+                    name="details"
+                    value={formData.details}
+                    onChange={handleInputChange}
+                    rows={3} 
+                    className="w-full rounded-md border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-2 text-sm focus:border-primary focus:ring-primary dark:text-white" 
+                    placeholder="Describe your corrosion issues..." 
+                    required
+                  ></textarea>
                 </div>
-                <button type="button" className="mt-2 w-full bg-safety hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                  Submit Request
-                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="mt-2 w-full bg-safety hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Sending...' : 'Submit Request'}
+                  {!isSubmitting && <span className="material-symbols-outlined text-sm">arrow_forward</span>}
                 </button>
               </form>
             </div>
@@ -209,9 +299,9 @@ const Corrosion: React.FC = () => {
       </main>
 
       {/* Sector Application Section */}
-      <section className="w-full bg-[#f1f4f1] py-16">
+      <section className="w-full bg-[#f1f4f1] dark:bg-slate-800 py-16">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <h2 className="text-slate-900 text-3xl font-bold mb-10 border-l-4 border-safety pl-4">Sector Application</h2>
+          <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-10 border-l-4 border-safety pl-4">Sector Application</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {sectors.map((sector, index) => (
               <SectorCard key={index} sector={sector} />
